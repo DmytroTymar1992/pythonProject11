@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Особистий кабінет</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+            rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../css/reset.css"/>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <link rel="stylesheet" href="../../css/personal.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <header class="header">
+        <div class="container">
+            <div class="header__inner">
+                <div class="header__inner-left">
+                    <a class="header__logo" href="#"
+                    ><img src="../../images/logo.svg" alt="logo" class="logo__img"
+                    /></a>
+                    <nav class="menu">
+                        <ul class="menu__list">
+                            <li class="menu__list-item">
+                                <a href="#" class="menu__link">Про компанію</a>
+                            </li>
+                            <li class="menu__list-item">
+                                <a href="#" class="menu__link">Новини</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="header__inner-right">
+                    <button class="header__create-btn btn-transparent">
+                        Створити резюме
+                    </button>
+                    <img
+                            src="../../images/bell.svg"
+                            alt="bell"
+                            class="header__bell"
+                    />
+                    <div class="header__user-block">
+                        <img
+                                src="../../images/header-img.svg"
+                                alt="header__profile-img"
+                                class="header__profile-img"
+                        />
+                        <p class="header__user-name">Ім’я користувача</p>
+                    </div>
+                </div>
+                <!--                <div class="user">-->
+                <!--                    <ul class="user__actions">-->
+                <!--                        <li class="user__actions-item ">-->
+                <!--                            <a href="#" class="user__actions-btn">Пошукачу</a>-->
+                <!--                        </li>-->
+                <!--                        <li class="user__actions-item">-->
+                <!--                            <a href="#" class="user__actions-btn user__actions-btn-active">Роботодавцю</a>-->
+                <!--                        </li>-->
+                <!--                    </ul>-->
+                <!--                    <a href="#" class="search__link">-->
+                <!--                        <img src="../../images/log-in.svg" alt="search" class="search__img"><span>Увійти</span></a>-->
+                <!--                </div>-->
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="personal__inner">
+                <div class="title-wrapper-start">
+                    <h1 class="title-xl">Мій акаунт</h1>
+                    <a class="link-sm" href="#">Дивитися публічний профіль</a>
+                </div>
+                <div class="personal__content-wrapper">
+                    <aside class="personal__content-left">
+                        <div class="personal__content-left-wrapper">
+                            <nav>
+                                <ul class="aside-nav__list">
+                                    <li class="text-medium-18"><a href="#">Налаштування профілю</a></li>
+                                    <li class="text-medium-18"><a href="#">Мої резюме</a></li>
+                                    <li class="text-medium-18 aside-nav__active"><a href="#">Історія відгуків</a></li>
+                                </ul>
+                                <ul class="vacancy-info__list">
+                                    <li class="vacancy-info__list-item">
+                                        <a class="text-medium-18" href="#">Рекомендовані вакансії</a>
+                                        <p class="vacancy-info__item-value">12</p>
+                                    </li>
+                                    <li class="vacancy-info__list-item">
+                                        <a class="text-medium-18" href="#">Збережені вакансії</a>
+                                        <p class="vacancy-info__item-value">4</p>
+                                    </li>
+                                </ul>
+                            </nav>
+                            <div class="personal__logout__link-wrapper">
+                                <a href="#" class="logout__link text-medium-18">
+                                    <img
+                                            src="../../images/log-in.svg"
+                                            alt="search"
+                                            class="search__img"
+                                    />Вийти</a
+                                >
+                            </div>
+                        </div>
+                    </aside>
+                    <section class="personal__content-right">
+                        <ul class="personal__vacancy-list">
+                            <li class="personal__vacancy-list-item">
+                                <div class="personal__hashtag-wrapper">
+                                    <p class="vacancies__card-hashtags-item personal-hashtags">Вакансія активна</p>
+                                </div>
+                                <div class="personal__vacancy-inner">
+                                    <div class="personal__vacancy-status-left">
+                                        <h3 class="vacancies__card-title">Менеджер з продажу</h3>
+                                        <div class="vacancy-status-content">
+                                            <div class="vacancy-status-content-img">
+                                                <img class="status-content-img" src="../../images/img-icon.svg"
+                                                     alt="img">
+                                                <p class="subtitle-text">Назва компанії</p>
+                                            </div>
+                                            <div class="location-block">
+                                                <img
+                                                        class="location-img"
+                                                        src="../../images/marker-pin-01.svg"
+                                                        alt="location"
+                                                />
+                                                <p class="location-text">Дніпро</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="personal__vacancy-status-right">
+                                        <div class="status-right-item">
+                                            <p class="status-right-text">Резюме:</p>
+                                            <div class="status-right-value">
+                                                <p class="status-right-name">“Менеджер з продажу”</p>
+                                            </div>
+
+                                        </div>
+                                        <div class="status-right-item">
+                                            <p class="status-right-text">Статус: </p>
+                                            <div class="status-right-value">
+                                                <p class="status-right-name">Переглянуто <span
+                                                        class="status-right-data">(30.06.2023  15:37)</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="personal__vacancy-list-item">
+                                <div class="personal__hashtag-wrapper">
+                                    <p class="vacancies__card-hashtags-item personal-hashtags">Вакансія завершена</p>
+                                </div>
+                                <div class="personal__vacancy-inner">
+                                    <div class="personal__vacancy-status-left">
+                                        <h3 class="vacancies__card-title">Менеджер з продажу</h3>
+                                        <div class="vacancy-status-content">
+                                            <div class="vacancy-status-content-img">
+                                                <img class="status-content-img" src="../../images/img-icon.svg"
+                                                     alt="img">
+                                                <p class="subtitle-text">Назва компанії</p>
+                                            </div>
+                                            <div class="location-block">
+                                                <img
+                                                        class="location-img"
+                                                        src="../../images/marker-pin-01.svg"
+                                                        alt="location"
+                                                />
+                                                <p class="location-text">Дніпро</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="personal__vacancy-status-right">
+                                        <div class="status-right-item">
+                                            <p class="status-right-text">Резюме:</p>
+                                            <div class="status-right-value">
+                                                <p class="status-right-name">“Менеджер з продажу”</p>
+                                            </div>
+
+                                        </div>
+                                        <div class="status-right-item">
+                                            <p class="status-right-text">Статус: </p>
+                                            <div class="status-right-value">
+                                                <p class="status-right-name">Переглянуто <span
+                                                        class="status-right-data">(30.06.2023  15:37)</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__inner">
+                <ul class="footer__list">
+                    <li class="footer__list-item">
+                        <a href="#" class="footer__link">Про компанію</a>
+                    </li>
+                    <li class="footer__list-item">
+                        <a href="#" class="footer__link">Контакти</a>
+                    </li>
+                    <li class="footer__list-item">
+                        <a href="#" class="footer__link">Допомога</a>
+                    </li>
+                </ul>
+                <ul class="footer__list">
+                    <li class="footer__list-item">
+                        <a href="#" class="footer__link">Корисні новини</a>
+                    </li>
+                    <li class="footer__list-item">
+                        <a href="#" class="footer__link">Оферта</a>
+                    </li>
+                    <li class="footer__list-item">
+                        <a href="#" class="footer__link">Умови користування</a>
+                    </li>
+                    <li class="footer__list-item">
+                        <a href="#" class="footer__link">Політика конфеденційності</a>
+                    </li>
+                </ul>
+                <ul class="footer__list">
+                    <li class="footer__list-item">
+                        <a href="#" class="footer__link">Фейсбук</a>
+                    </li>
+                    <li class="footer__list-item">
+                        <a href="#" class="footer__link">Телеграм</a>
+                    </li>
+                    <li class="footer__list-item">
+                        <a href="#" class="footer__link">Вайбер</a>
+                    </li>
+                    <li class="footer__list-item">
+                        <a href="#" class="footer__link">Інстаграм</a>
+                    </li>
+                </ul>
+                <ul class="footer__list">
+                    <li class="footer__list-item">
+                        <a href="#" class="footer__link"
+                        ><img
+                                src="../../images/logo.svg"
+                                alt="logo"
+                                class="logo__img"
+                        /></a>
+                    </li>
+                    <li class="footer__list-item">
+                        <a href="#" class="footer__btn btn-transparent"
+                        >Для роботодавця</a
+                        >
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</div>
+<script src="../../index.js"></script>
+</body>
+</html>
