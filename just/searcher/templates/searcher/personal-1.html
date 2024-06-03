@@ -1,0 +1,222 @@
+{% extends "main/base.html" %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Особистий кабінет</title>
+     {% block extra_styles %}
+    <link rel="stylesheet" href="{% static 'main/css/personal.css' %}"/>
+    {% endblock %}
+</head>
+<body>
+{% block content %}
+<div class="wrapper">
+    <main>
+        <div class="container">
+            <div class="personal__inner">
+                <div class="title-wrapper-start">
+                    <h1 class="title-xl">Мій акаунт</h1>
+                    <a class="link-sm" href="#">Дивитися публічний профіль</a>
+                </div>
+
+                <div class="personal__content-wrapper">
+                    <aside class="personal__content-left">
+                        <div class="personal__content-left-wrapper">
+                            <nav>
+                                <ul class="aside-nav__list">
+                                    <li class="text-medium-18 aside-nav__active"><a href="#">Налаштування профілю</a>
+                                    </li>
+                                    <li class="text-medium-18"><a href="{% url 'profile_resume_list' %}">Мої резюме</a></li>
+                                    <li class="text-medium-18"><a href="#">Історія відгуків</a></li>
+                                </ul>
+                                <ul class="vacancy-info__list">
+                                    <li class="vacancy-info__list-item">
+                                        <a class="text-medium-18" href="#">Рекомендовані вакансії</a>
+                                        <p class="vacancy-info__item-value">12</p>
+                                    </li>
+                                    <li class="vacancy-info__list-item">
+                                        <a class="text-medium-18" href="#">Збережені вакансії</a>
+                                        <p class="vacancy-info__item-value">4</p>
+                                    </li>
+                                </ul>
+                            </nav>
+                            <div class="personal__logout__link-wrapper">
+                                <a href="#" class="logout__link text-medium-18">
+                                    <img
+                                            src="../../images/log-in.svg"
+                                            alt="search"
+                                            class="search__img"
+                                    />Вийти</a
+                                >
+                            </div>
+
+                        </div>
+
+
+                    </aside>
+                    <section class="personal__content-right">
+                        <form class="form__inner" method="post">
+                            {% csrf_token %}
+                            <fieldset class="form-field">
+                                <h3 class="form__subtitle-md">Особиста інформація</h3>
+                                <div class="form__inputs-photo-block">
+                                    <img
+                                            src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'main/images/img-icon.svg' %}{% endif %}"
+                                            alt="photo"
+                                            class="personal__photo"
+                                    />
+                                    <div class="form__inputs-photo-btn-wrapper">
+                                        <label class="update-photo__btn btn-transparent">
+                                            Оновити
+                                            <input type="file" name="avatar" accept="image/*" style="display: none;">
+                                        </label>
+                                        <button type="submit" name="delete_avatar" value="1" class="delete-photo__btn btn-transparent">
+                                            <img src="{% static 'main/images/delete.svg' %}" alt="delete"/>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form__inputs-wrapper">
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label for="name-resume" class="text-medium-16"
+                                        >Прізвище*</label
+                                        >
+                                        {{ form.last_name }}
+                                    </div>
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label for="name-resume" class="text-medium-16"
+                                        >Ім’я*</label
+                                        >
+                                        {{ form.first_name }}
+                                    </div>
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label for="city-resume" class="text-medium-16"
+                                        >Місто*</label
+                                        >
+                                        {{ form.city }}
+                                    </div>
+
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label class="text-medium-16">Дата народження*</label>
+                                        <div class="select-date-block">
+                                            <label for="day-resume" class="label-hidden"
+                                            >from</label
+                                            >
+                                            {{ form.birthday }}
+                                        </div>
+                                    </div>
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label for="phone-resume" class="text-medium-16"
+                                        >Телефон*</label
+                                        >
+                                        {{ form.phone }}
+                                    </div>
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label for="email-resume" class="text-medium-16"
+                                        >Ел.Пошта</label
+                                        >
+                                        {{ form.email }}
+                                    </div>
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label for="social-resume" class="text-medium-16"
+                                        >Соціальні мережі</label
+                                        >
+                                        <input
+                                                id="social-resume"
+                                                class="form__input input-size-lg"
+                                                type="text"
+                                                placeholder="Facebook, Instagram, Linkedin"
+                                        />
+                                    </div>
+                                    <div class="input-add__wrapper">
+                                        <img
+                                                class="input-add__btn"
+                                                src="../../images/add-circle.svg"
+                                                alt="plus"
+                                        />
+                                        <p>Додати посилання</p>
+                                    </div>
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label for="submit-personal" class="label-hidden"
+                                        >Пароль</label
+                                        >
+                                        <input
+                                                id="submit-personal"
+                                                class="form__input btn-transparent"
+                                                type="submit"
+                                                value="Зберегти зміни"
+                                        />
+                                    </div>
+                                    <div class="input-add__left-wrapper">
+                                        <img
+                                                class="input-add__btn"
+                                                src="../../images/delete-alt.svg"
+                                                alt="plus"
+                                        />
+                                        <p>Видалити профіль</p>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                        <form class="form__inner">
+                            <fieldset class="form-field">
+                                <div class="form__subtitle-wrapper">
+                                    <h3 class="form__subtitle-md">Зміна паролю</h3>
+                                    <p class="subtitle-description">Остання зміна: 23.06.2023</p>
+                                </div>
+
+                                <div class="form__inputs-wrapper">
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label for="password-personal" class="text-medium-16"
+                                        >Поточний пароль</label
+                                        >
+                                        <input
+                                                id="password-personal"
+                                                class="form__input input-size-lg"
+                                                type="password"
+                                        />
+                                    </div>
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label for="password-personal1" class="text-medium-16"
+                                        >Новий пароль</label
+                                        >
+                                        <input
+                                                id="password-personal1"
+                                                class="form__input input-size-lg"
+                                                type="password"
+                                        />
+                                    </div>
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label for="password-personal2" class="text-medium-16"
+                                        >Повторити пароль</label
+                                        >
+                                        <input
+                                                id="password-personal2"
+                                                class="form__input input-size-lg"
+                                                type="password"
+                                        />
+                                    </div>
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label for="password-personal3" class="label-hidden"
+                                        >Пароль обновить</label
+                                        >
+                                        <input
+                                                id="password-personal3"
+                                                class="form__input btn-transparent"
+                                                type="submit"
+                                                value="Оновити пароль"
+                                        />
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </section>
+
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}
+<script src="../../index.js"></script>
+</body>
+</html>

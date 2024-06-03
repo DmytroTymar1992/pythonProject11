@@ -1,0 +1,543 @@
+{% extends "main/base_employer.html" %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Створення резюме</title>
+    {% block extra_styles %}
+    <link rel="stylesheet" href="{% static 'main/css/create-resume.css' %}"/>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    {% endblock %}
+</head>
+<body>
+{% block content %}
+<div class="wrapper">
+
+    <main>
+        <div class="container">
+            <div class="create-resume__inner">
+                <h1 class="title-xl">Створення резюме</h1>
+                <div class="create-resume__content-wrapper">
+                    <section class="create-resume__content-left">
+                        <form class="form__inner" method="post">
+                            {% csrf_token %}
+                            <fieldset class="form-field">
+                                <h3 class="form__subtitle-md" id='personal_information'>Особиста інформація</h3>
+                                <div class="form__inputs-photo-block">
+                                    <img
+                                            src="../../images/img-icon.svg"
+                                            alt="photo"
+                                            class="create-resume__photo"
+                                    />
+                                    <div class="form__inputs-photo-btn-wrapper">
+                                        <button class="update-photo__btn btn-transparent">
+                                            Оновити
+                                        </button>
+                                        <button class="delete-photo__btn btn-transparent">
+                                            <img src="../../images/delete.svg" alt="delete"/>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form__inputs-wrapper">
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label for="{{ form.first_name.id_for_label }}" class="text-medium-16"
+                                        >Ім’я*</label
+                                        >
+                                        {{ form.first_name }}
+                                    </div>
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label for="{{ form.last_name.id_for_label }}" class="text-medium-16"
+                                        >Прізвище*</label
+                                        >
+                                        {{ form.last_name }}
+                                    </div>
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label for="{{ form.city.id_for_label }}" class="text-medium-16"
+                                        >Місто*</label
+                                        >
+                                        {{ form.city }}
+                                    </div>
+
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label class="text-medium-16">Дата народження*</label>
+                                        <div class="create-resume__select-block">
+                                            <label for="day-resume" class="label-hidden"
+                                            >from</label
+                                            >
+                                            {{ form.date_of_birth }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset class="form-field">
+                                <h3 class="form__subtitle-md" id="contact_information"> Контактна інформація</h3>
+                                <div class="form__inputs-wrapper">
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label for="{{ form.phone.id_for_label }}" class="text-medium-16"
+                                        >Телефон*</label>
+                                        {{ form.phone }}
+                                    </div>
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label for="{{ form.email.id_for_label }}" class="text-medium-16"
+                                        >Ел.Пошта</label
+                                        >
+                                        {{ form.email }}
+                                    </div>
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label for="social-resume" class="text-medium-16"
+                                        >Соціальні мережі</label
+                                        >
+                                        <input
+                                                id="social-resume"
+                                                class="form__input create-resume__input-size-lg"
+                                                type="text"
+                                                placeholder="Facebook, Instagram, Linkedin"
+                                        />
+                                    </div>
+                                    <div class="input-add__wrapper">
+                                        <img
+                                                class="input-add__btn"
+                                                src="../../images/add-circle.svg"
+                                                alt="plus"
+                                        />
+                                        <p>Додати посилання</p>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset class="form-field">
+                                <h3 class="form__subtitle-md" id="desired_position">Бажана посада</h3>
+                                <div class="form__inputs-wrapper">
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label for="id_desired_positions" class="text-medium-16">Назва посади*</label>
+                                            {{ form.desired_positions }}
+                                    </div>
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label class="text-medium-16"
+                                        >Зарплатні очікування</label
+                                        >
+                                        <div
+                                                class="input-salary-right create-resume__input-size-md"
+                                        >
+                                            <label for="from" class="label-hidden">from</label>
+                                            {{ form.salary_min }}
+                                            <span>-</span>
+                                            <label for="to" class="label-hidden"></label>
+                                            {{ form.salary_max }}
+                                            <div class="form__input-btn-wrapper">
+                                                <button
+                                                        class="salary__input-btn salary__input-btn-active"
+                                                >
+                                                    ₴
+                                                </button>
+                                                <button class="salary__input-btn">$</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form__input-horizontal-wrapper">
+                                        <ul class="form__input-checkbox-wrapper">
+                                            <li class="form__input-checkbox-item">
+                                                <p class="title-checkbox-item">Тип зайнятості</p>
+                                                {% for checkbox in form.employment_type %}
+                                                <div class="form__checkbox-wrapper">
+                                                    {{ checkbox.tag }}
+                                                    <label class="label-checkbox" for="{{ checkbox.id_for_label }}">
+                                                        {{ checkbox.choice_label }}
+                                                    </label>
+                                                </div>
+                                                {% endfor %}
+                                            </li>
+                                            <li class="form__input-checkbox-item">
+                                                <p class="title-checkbox-item">Характер роботи</p>
+                                                {% for checkbox in form.job_character %}
+                                                <div class="form__checkbox-wrapper">
+                                                    {{ checkbox.tag }}
+                                                    <label class="label-checkbox" for="{{ checkbox.id_for_label }}">
+                                                    {{ checkbox.choice_label }}
+                                                    </label>
+                                                </div>
+                                                {% endfor %}
+                                            </li>
+                                            <li class="form__input-checkbox-item">
+                                                <p class="title-checkbox-item">Готовність до переїзду</p>
+                                                {% for checkbox in form.relocation_ready %}
+                                                <div class="form__checkbox-wrapper">
+                                                    {{ checkbox.tag }}
+                                                    <label class="label-checkbox" for="{{ checkbox.id_for_label }}">
+                                                        {{ checkbox.choice_label }}
+                                                    </label>
+                                                </div>
+                                                {% endfor %}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset class="form-field">
+                                <h3 class="form__subtitle-md">Освіта</h3>
+                                <div class="form__inputs-wrapper" id="educations-formset">
+                                    {{ education_formset.management_form }}
+                                </div>
+                                <button id="add-education" class="btn-transparent">Додати освіту</button>
+                            </fieldset>
+                            <fieldset class="form-field">
+                                <h3 class="form__subtitle-md">Досвід роботи</h3>
+                                <div class="form__inputs-wrapper" id="work-experiences-formset">
+                                    {{work_experience_formset.management_form }}
+                                </div>
+                                <button id="add-work-experience" class="btn-transparent">Додати роботу</button>
+                            </fieldset>
+                            <fieldset class="form-field">
+                                <h3 class="form__subtitle-md">Навички</h3>
+                                <p class="create-resume__subtitle-description">
+                                    Оберіть навички, якими володієте та які будуть корисні вам
+                                    у новій роботі. Це допоможе роботодавцям знайти ваше
+                                    резюме і надасть вам перевагу перед іншими кандидатами.
+                                </p>
+                                <div class="form__inputs-wrapper">
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label for="role3-resume" class="label-hidden"
+                                        >Посада*</label
+                                        >
+                                        <input
+                                                id="role3-resume"
+                                                class="form__input"
+                                                type="text"
+                                                placeholder="Введіть назву навички"
+                                        />
+                                    </div>
+                                    <div class="knowledge-habits-block">
+                                        <h5 class="text-medium-16">Можливо, Вам підійде</h5>
+                                        <ul class="knowledge-habits__list">
+                                            <li class="knowledge-habits__item">
+                                                Стресостійкість
+                                            </li>
+                                            <li class="knowledge-habits__item">
+                                                Стресостійкість
+                                            </li>
+                                            <li class="knowledge-habits__item">
+                                                Стресостійкість
+                                            </li>
+                                            <li class="knowledge-habits__item">
+                                                Стресостійкість
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset class="form-field">
+                                <h3 class="form__subtitle-md">Додаткові курси</h3>
+                                <div class="form__inputs-wrapper" id="courses-formset">
+                                    {{course_formset.management_form }}
+                                </div>
+                                <div class="input-add__left-wrapper btn-transparent" id="add-course">
+                                    <img
+                                            class="input-add__btn"
+                                            src="../../images/add-circle.svg"
+                                            alt="plus"
+                                    />
+                                    <p>Додати курс або тренінг</p>
+
+                                </div>
+                            </fieldset>
+                            <fieldset class="form-field">
+                                <h3 class="form__subtitle-md">Знання мов</h3>
+                                <div  id="user-languages-formset">
+                                    {{user_language_formset.management_form }}
+                                </div>
+                                <div class="form__inputs-wrapper">
+                                    <div class="input-add__left-wrapper bth-add" id="add-user-language">
+                                        <img
+                                                class="input-add__btn"
+                                                src="../../images/add-circle.svg"
+                                                alt="plus"
+                                        />
+                                        <p>Додати ще одну мову</p>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <div class="form__button-wrapper">
+                                <button
+                                        type="submit"
+                                        class="create-resume__create-btn btn-color"
+                                >
+                                    Розмістити резюме
+                                </button>
+                                <button
+                                        type="button"
+                                        class="create-resume__view-btn btn-transparent"
+                                >
+                                    Переглянути
+                                </button>
+                            </div>
+                        </form>
+                    </section>
+                    <aside class="create-resume__content-right">
+                        <div class="create-resume__article-right">
+                            <div class="v-progress">
+                                <ul>
+                                    <li class="v-progress-item completed active">
+                                        <a href="#personal_information">
+                                            Особиста інформація
+                                        </a>
+                                    </li>
+                                    <li class="v-progress-item inprogress">
+                                        <a href="#contact_information">
+                                            Контактна інформація
+                                        </a>
+                                    </li>
+                                    <li class="v-progress-item inprogress">
+                                        <a href="#desired_position">
+                                            Бажана посада
+                                        </a>
+                                    </li>
+                                    <li class="v-progress-item inprogress">Освіта</li>
+                                    <li class="v-progress-item inprogress">Досвід роботи</li>
+                                    <li class="v-progress-item inprogress">Навички</li>
+                                    <li class="v-progress-item inprogress">
+                                        Додаткові курси
+                                    </li>
+                                    <li class="v-progress-item inprogress">Знання мов</li>
+                                    <li class="v-progress-item inprogress">
+                                        Завантаження резюме-файлу
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</div>
+
+
+
+<div id="empty-education-form" style="display: none;">
+    <div class="education-form form-row form__inputs-wrapper">
+        {% for form in education_formset %}
+            <div class="form__input-horizontal-wrapper">
+                <label for="{{ form.education_level.id_for_label }}" class="text-medium-16">Рівень освіти*</label>
+                {{ form.education_level }}
+            </div>
+            <div class="form__input-horizontal-wrapper">
+                <label for="{{ form.city.id_for_label }}" class="text-medium-16">Місто*</label>
+                {{ form.city }}
+            </div>
+            <div class="form__input-horizontal-wrapper">
+                <label for="{{ form.school.id_for_label }}" class="text-medium-16">Назва школи*</label>
+                {{ form.school }}
+            </div>
+            <div class="form__input-horizontal-wrapper">
+                <label for="{{ form.faculty.id_for_label }}" class="text-medium-16">Факультет*</label>
+                {{ form.faculty }}
+            </div>
+
+            <div class="form__input-horizontal-wrapper">
+                <label for="speciality-resume" class="text-medium-16">Період навчання*</label>
+                <div class="form__period-block">
+                    <div class="form__period-item create-resume__input-size-lg">
+                        <div class="form__input-horizontal-wrapper">
+                            <label for="{{ form.start_month.id_for_label }}" class="label-hidden text-medium-16">Місяць</label>
+                            {{ form.start_month }}
+                        </div>
+                        <div class="form__input-horizontal-wrapper">
+                            <label for="{{ form.start_year.id_for_label }}" class="label-hidden text-medium-16">Рік</label>
+                            {{ form.start_year }}
+                        </div>
+                    </div>
+                    <div>-</div>
+                    <div class="form__period-item create-resume__input-size-lg">
+                        <div class="form__input-horizontal-wrapper">
+                            <label for="{{ form.end_month.id_for_label }}" class="label-hidden text-medium-16">Місяць</label>
+                            {{ form.end_month }}
+                        </div>
+                        <div class="form__input-horizontal-wrapper">
+                            <label for="{{ form.end_year.id_for_label }}" class="label-hidden text-medium-16">Рік</label>
+                            {{ form.end_year }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-add__wrapper">
+                {{ form.is_student }}
+                <label for="student" class="text-medium-16">Я студент</label>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<div id="empty-work-experience-form" style="display: none;">
+    <div class="work-experience-form form-row form__inputs-wrapper">
+        {% for form in work_experience_formset %}
+        <div class="form__input-horizontal-wrapper">
+            <label for="{{ form.position.id_for_label }}" class="text-medium-16"
+            >Посада*</label
+            >
+            {{ form.position }}
+        </div>
+        <div class="form__input-horizontal-wrapper">
+            <label for="{{ form.company.id_for_label }}" class="text-medium-16"
+            >Назва компанії*</label
+            >
+            {{ form.company }}
+        </div>
+        <div class="form__input-horizontal-wrapper">
+            <label for="speciality-resume" class="text-medium-16">Період роботи*</label>
+            <div class="form__period-block">
+                <div class="form__period-item create-resume__input-size-lg">
+                    <div class="form__input-horizontal-wrapper">
+                        <label for="{{ form.start_month.id_for_label }}" class="label-hidden text-medium-16">Місяць</label>
+                        {{ form.start_month }}
+                    </div>
+                    <div class="form__input-horizontal-wrapper">
+                        <label for="{{ form.start_year.id_for_label }}" class="label-hidden text-medium-16">Рік</label>
+                        {{ form.start_year }}
+                    </div>
+                </div>
+                <div>-</div>
+                <div class="form__period-item create-resume__input-size-lg">
+                    <div class="form__input-horizontal-wrapper">
+                        <label for="{{ form.end_month.id_for_label }}" class="label-hidden text-medium-16">Місяць</label>
+                        {{ form.end_month }}
+                    </div>
+                    <div class="form__input-horizontal-wrapper">
+                        <label for="{{ form.end_year.id_for_label }}" class="label-hidden text-medium-16">Рік</label>
+                        {{ form.end_year }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="input-add__wrapper">
+            {{ form.is_current }}
+            <label for="student" class="text-medium-16">Працюю тут зараз </label>
+        </div>
+        <div class="create-resume__textarea-wrapper">
+            <label for="desc-experience" class="text-medium-16"
+            >Опис досвіду</label
+            >
+            {{ form.description }}
+        </div>
+        <div class="form__input-horizontal-wrapper">
+            <label for="file-resume" class="text-medium-16"
+            >Рекомендації</label
+            >
+            <div class="loading-btn-wrapper">
+                <button class="loading-btn btn-transparent">
+                    <label for="file-resume" class="loading-label">
+                        <img
+                                src="../../images/add-circle.svg"
+                                alt="add-circle"
+                        />
+                        Завантажити файл
+                    </label>
+                </button>
+                <input
+                        id="file-resume"
+                        type="file"
+                        style="display: none"
+                />
+            </div>
+        </div>
+        <div class="input-add__wrapper">
+            <p>Немає рекомендації?</p>
+            <a href="#" class="input-add__link"
+            >Додайте дані роботодавця
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div id="empty-course-form" style="display: none;">
+    <div class="course-form form-row form__inputs-wrapper">
+    {% for form in course_formset %}
+    <div class="form__inputs-wrapper">
+            <div class="form__input-horizontal-wrapper">
+                <label for="curses-resume" class="text-medium-16"
+                >Назва курсу*</label
+                >
+                {{ form.name }}
+            </div>
+            <div class="form__input-horizontal-wrapper">
+                <label for="speciality-resume" class="text-medium-16">Період навчання*</label>
+                <div class="form__period-block">
+                    <div class="form__period-item create-resume__input-size-lg">
+                        <div class="form__input-horizontal-wrapper">
+                            <label for="{{ form.start_month.id_for_label }}" class="label-hidden text-medium-16">Місяць</label>
+                            {{ form.start_month }}
+                        </div>
+                        <div class="form__input-horizontal-wrapper">
+                            <label for="{{ form.start_year.id_for_label }}" class="label-hidden text-medium-16">Рік</label>
+                            {{ form.start_year }}
+                        </div>
+                    </div>
+                    <div>-</div>
+                    <div class="form__period-item create-resume__input-size-lg">
+                        <div class="form__input-horizontal-wrapper">
+                            <label for="{{ form.end_month.id_for_label }}" class="label-hidden text-medium-16">Місяць</label>
+                            {{ form.end_month }}
+                        </div>
+                        <div class="form__input-horizontal-wrapper">
+                            <label for="{{ form.end_year.id_for_label }}" class="label-hidden text-medium-16">Рік</label>
+                            {{ form.end_year }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form__input-horizontal-wrapper">
+                <label for="sert-resume" class="text-medium-16"
+                >Сертифікат</label
+                >
+                {{ form.certificate_link }}
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+<div id="empty-user-language-form" style="display: none;">
+    <div class="user-language-form form-row form__inputs-wrapper">
+        {% for form in user_language_formset %}
+            <div class="form__input-horizontal-wrapper">
+                <label for="role2-resume" class="text-medium-16"
+                >Мова та рівень</label
+                >
+                <div
+                        class="create-resume__double-select create-resume__input-size-lg"
+                >
+                    <label for="lang-resume" class="label-hidden"
+                    >from</label
+                    >
+                    {{ form.language }}
+                    <label for="level2-resume" class="label-hidden"
+                    >from</label
+                    >
+                    {{ form.proficiency_level }}
+                </div>
+            </div>
+            <div class="form__input-horizontal-wrapper">
+                <label for="lang2-resume" class="text-medium-16"
+
+                >Сертифікат</label
+                >
+                {{ form.certificate_link }}
+            </div>
+
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="{% static 'main/js/create-resume.js' %}"></script>
+<script>
+    var createResumeUrl = "{% url 'create_resume' %}"
+</script>
+<script src="{% static 'main/js/create-resume-select.js' %}"></script>
+{% endblock %}
+</body>
+</html>

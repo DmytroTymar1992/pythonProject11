@@ -1,0 +1,140 @@
+{% extends "main/base_employer.html" %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Головна</title>
+    {% block extra_styles %}
+    <link rel="stylesheet" href="{% static 'main/css/main-employer-no-auth.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/create-vacancy.css' %}">
+    {% endblock %}
+</head>
+
+<body>
+
+<div class="wrapper">
+    {% block content %}
+    <main>
+        <div class="container">
+            <h1 class="main___title">Знаходьте співробітників</h1>
+            <p class="main__subtitle"><span class="main__subtitle-bold">100 000</span> кандидатів з <span
+                    class="main__subtitle-bold">75 000</span> резюме</p>
+            <search class="search-location">
+                <form action="#" class="search-location__form">
+                    <div class="search-location__form-input">
+                        <img src="{% static 'main/images/search-md.svg' %}" alt="search" class="search-location__form-img">
+                        <label for="search" class="label-hidden">Введіть посаду</label>
+                        <input type="text" id="search" name="search" class="search-location__input"
+                               placeholder="Введіть посаду">
+                        <div class="select__vector"></div>
+                        <img src="{% static 'main/images/marker-pin-01.svg' %}" alt="cities" class="select__img">
+                        <label for="city" class="label-hidden">Місто</label>
+                        <select name="city" id="city" class="search-location__select">
+                            <option value="city">Вся Україна</option>
+                            <option value="city">Київ</option>
+                            <option value="city">Львів</option>
+                            <option value="city">Харків</option>
+                            <option value="city">Одеса</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="search-location__btn btn-color">Знайти кандидатів</button>
+                </form>
+            </search>
+            <section class="create-vacancy">
+                <div class="main__create-vacancy-wrapper">
+                    <div class="create-vacancy__block">
+                        <ul class="create-vacancy__list">
+                            <li class="create-vacancy__item">
+                                <img class="create-vacancy__item-img" src="{% static 'main/images/ellipse-3.svg' %}" alt="ellipse">
+                                <div class="create-vacancy__item-text">
+                                    <p class="create-vacancy__item-title">Створіть акаунт</p>
+                                    <p class="create-vacancy__item-description">Lorem ipsum dolor sit amet, consectetur
+                                        adipiscing elit, sed do eiusmod tempor incididunt.
+                                    </p>
+                                </div>
+                            </li>
+                            <li class="create-vacancy__item">
+                                <img class="create-vacancy__item-img" src="{% static 'main/images/ellipse-3.svg' %}" alt="ellipse">
+                                <div class="create-vacancy__item-text">
+                                    <p class="create-vacancy__item-title">Публікуйте вакансію</p>
+                                    <p class="create-vacancy__item-description">Lorem ipsum dolor sit amet, consectetur
+                                        adipiscing elit, sed do eiusmod tempor incididunt.
+                                    </p>
+                                </div>
+                            </li>
+                            <li class="create-vacancy__item">
+                                <img class="create-vacancy__item-img" src="{% static 'main/images/ellipse-3.svg' %}" alt="ellipse">
+                                <div class="create-vacancy__item-text">
+                                    <p class="create-vacancy__item-title">Отримуйте відгуки кандидатів</p>
+                                    <p class="create-vacancy__item-description">Lorem ipsum dolor sit amet, consectetur
+                                        adipiscing elit, sed do eiusmod tempor incididunt.
+                                    </p>
+                                </div>
+                            </li>
+                        </ul>
+                        <button class="create-vacancy__btn btn-color">Створити вакансію</button>
+                    </div>
+                </div>
+            </section>
+            <section class="main__advices">
+                <div class="main__advices-wrapper">
+                    <div class="advices__block-top">
+                        <h2 class="advices__title">Поради та статті</h2>
+                        <div class="advices-block__top-right">
+                            <a href="#" class="advices-block__link">Подивитись всі</a>
+                            <img src="{% static 'main/images/arrow-sm-right.svg' %}" alt="rectangle">
+                        </div>
+                    </div>
+                    <ul class="advices__block">
+                        <li class="advices__block-item">
+                            <div class="advices__block-left">
+                                <img src="{% static 'main/images/image-icon.svg' %}" alt="advices">
+                            </div>
+                            <div class="advices__block-right">
+                                <p class="advices__subtitle">Як скласти вражаюче резюме:</p>
+                                <p class="advices__subtitle">крок за кроком із практичними порадами</p>
+                                <a href="" class="advices__link">Читати далі</a>
+                            </div>
+                        </li>
+                        <li class="advices__block-item">
+                            <div class="advices__block-left">
+                                <img src="../../images/image-icon.svg" alt="advices">
+                            </div>
+                            <div class="advices__block-right">
+                                <p class="advices__subtitle">Як скласти вражаюче резюме:</p>
+                                <p class="advices__subtitle">крок за кроком із практичними порадами</p>
+                                <a href="" class="advices__link">Читати далі</a>
+                            </div>
+                        </li>
+                        <li class="advices__block-item">
+                            <div class="advices__block-left">
+                                <img src="../../images/image-icon.svg" alt="advices">
+                            </div>
+                            <div class="advices__block-right">
+                                <p class="advices__subtitle">Як скласти вражаюче резюме:</p>
+                                <p class="advices__subtitle">крок за кроком із практичними порадами</p>
+                                <a href="" class="advices__link">Читати далі</a>
+                            </div>
+                        </li>
+                        <li class="advices__block-item">
+                            <div class="advices__block-left">
+                                <img src="../../images/image-icon.svg" alt="advices">
+                            </div>
+                            <div class="advices__block-right">
+                                <p class="advices__subtitle">Як скласти вражаюче резюме:</p>
+                                <p class="advices__subtitle">крок за кроком із практичними порадами</p>
+                                <a href="" class="advices__link">Читати далі</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </main>
+    {% endblock %}
+</div>
+
+<script src="../../index.js"></script>
+
+</body>
+</html>

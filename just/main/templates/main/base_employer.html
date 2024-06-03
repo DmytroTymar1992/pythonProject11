@@ -1,0 +1,106 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Головна</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'main/css/reset.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+    {% block extra_styles %}{% endblock %}
+
+</head>
+
+<body>
+<header class="header">
+    <div class="container">
+        <div class="header__inner">
+            <div class="header__inner-left">
+                <a class="header__logo" href="{% url 'home' %}"><img src="{% static 'main/images/logo.svg' %}" alt="logo" class="logo__img"></a>
+                <nav class="menu">
+                    <ul class="menu__list">
+                        <li class="menu__list-item"><a href="#" class="menu__link">Про компанію</a></li>
+                        <li class="menu__list-item"><a href="#" class="menu__link">Новини</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+            {% if user.is_authenticated %}
+            <!-- user-block auth -->
+            <div class="header__inner-right">
+                {% if user.role == 'seeker' %}
+                <button class="header__create-btn btn-transparent">Створити резюме</button>
+                <img src="{% static 'main/images/bell.svg' %}" alt="bell" class="header__bell">
+                <div class="header__user-block">
+                    <img src="{% static 'main/images/header-img.svg' %}" alt="header__profile-img" class="header__profile-img">
+                    <p class="header__user-name">{{ user.first_name }} {{ user.last_name }}</p>
+                </div>
+                {% elif user.role == 'employer' %}
+                <button class="header__create-btn btn-transparent">Створити вакансію</button>
+                <img src="{% static 'main/images/bell.svg' %}" alt="bell" class="header__bell">
+                <div class="header__user-block">
+                    <img src="{% static 'main/images/header-img.svg' %}" alt="header__profile-img" class="header__profile-img">
+                    <p class="header__user-name">{{ user.first_name }} {{ user.last_name }}</p>
+                </div>
+                {% endif %}
+            </div>
+            {% else %}
+            <!-- user-block no auth -->
+            <div class="header__inner-right">
+                <div class="user">
+                    <ul class="user__actions">
+                        <li class="user__actions-item ">
+                            <a href="{% url 'home' %}" class="user__actions-btn">Пошукачу</a>
+                        </li>
+                        <li class="user__actions-item">
+                            <a href="#" class="user__actions-btn user__actions-btn-active">Роботодавцю</a>
+                        </li>
+                    </ul>
+                    <a href="#" class="search__link">
+                        <img src="{% static 'main/images/log-in.svg' %}" alt="search" class="search__img"><span>Увійти</span></a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</header>
+
+{% block content %}
+{% endblock %}
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer__inner">
+            <ul class="footer__list">
+                <li class="footer__list-item"><a href="#" class="footer__link">Про компанію</a></li>
+                <li class="footer__list-item"><a href="#" class="footer__link">Контакти</a></li>
+                <li class="footer__list-item"><a href="#" class="footer__link">Допомога</a></li>
+            </ul>
+            <ul class="footer__list">
+                <li class="footer__list-item"><a href="#" class="footer__link">Корисні новини</a></li>
+                <li class="footer__list-item"><a href="#" class="footer__link">Оферта</a></li>
+                <li class="footer__list-item"><a href="#" class="footer__link">Умови користування</a></li>
+                <li class="footer__list-item"><a href="#" class="footer__link">Політика конфеденційності</a></li>
+            </ul>
+            <ul class="footer__list">
+                <li class="footer__list-item"><a href="#" class="footer__link">Фейсбук</a></li>
+                <li class="footer__list-item"><a href="#" class="footer__link">Телеграм</a></li>
+                <li class="footer__list-item"><a href="#" class="footer__link">Вайбер</a></li>
+                <li class="footer__list-item"><a href="#" class="footer__link">Інстаграм</a></li>
+            </ul>
+            <ul class="footer__list">
+                <li class="footer__list-item"><a href="#" class="footer__link"><img src="{% static 'main/images/logo.svg' %}"></a></li>
+                <li class="footer__list-item"><a href="#" class="footer__btn btn-transparent">Для роботодавця</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<script src="{% static 'main/js/index.js' %}"></script>
+
+{% block extra_js %}
+{% endblock %}
+</body>
+</html>

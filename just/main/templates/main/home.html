@@ -1,0 +1,227 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Головна</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+            rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'main/css/reset.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+</head>
+<body>
+{% block content %}
+<div class="wrapper">
+
+{% include 'main/login.html' %}
+
+    <main class="main">
+        <div class="container">
+            <h1 class="main___title">JUST looc - Тут Твоя Робота </h1>
+            <p class="main__subtitle"><span class="main__subtitle-bold">100 000</span> актуальних вакансій від <span
+                    class="main__subtitle-bold">30 000</span> компаній</p>
+            <search class="search-location">
+                <form action="#" class="search-location__form">
+                    <div class="search-location__form-input">
+                        <img src="{% static 'main/images/search-md.svg' %}" alt="search" class="search-location__form-img">
+                        <label for="search" class="label-hidden">Пошук вакансії</label>
+                        <input type="text" id="search" name="search" class="search-location__input" placeholder="Введіть вакансію">
+                        <div class="select__vector"></div>
+                        <img src="{% static 'main/images/marker-pin-01.svg' %}" alt="cities" class="select__img">
+                        <label for="city" class="label-hidden">Місто</label>
+                        <select name="city" id="city" class="search-location__select">
+                            <option value="city">Вся Україна</option>
+                            <option value="city">Київ</option>
+                            <option value="city">Львів</option>
+                            <option value="city">Харків</option>
+                            <option value="city">Одеса</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="search-location__btn btn-color">Знайти роботу</button>
+                </form>
+            </search>
+            <section class="popular-vacancies">
+                <div class="vacancies-block">
+                    <div class="vacancies-block__top">
+                        <div class="vacancies-block__top-left">
+                            <img src="{% static 'main/images/rectangle-5.svg' %}" alt="rectangle">
+                            <h2 class="vacancies-block__title">Популярні вакансії</h2>
+                        </div>
+                        <div class="vacancies-block__top-right">
+                            <a href="#" class="vacancies-block__link">Подивитись всі</a>
+                            <img src=" {% static 'main/images/arrow-sm-right.svg' %}" alt="rectangle">
+                        </div>
+
+                    </div>
+                    <ul class="vacancies-block__list">
+
+                        <li class="vacancies-block__list-item">
+                            <span class="vacancies-block__list-title"><img src="{% static 'main/images/ellipse.svg'%}" alt="ellipse">Назва вакансії</span>
+                            <span class="vacancies-block__list-number">2177</span>
+                        </li>
+                        <li class="vacancies-block__list-item">
+                            <span class="vacancies-block__list-title"><img src="{% static 'main/images/ellipse.svg'%}" alt="ellipse">Назва вакансії</span>
+                            <span class="vacancies-block__list-number">353</span>
+                        </li>
+                        <li class="vacancies-block__list-item">
+                            <span class="vacancies-block__list-title"><img src="{% static 'main/images/ellipse.svg'%}" alt="ellipse">Назва вакансії</span>
+                            <span class="vacancies-block__list-number">234</span>
+                        </li>
+                        <li class="vacancies-block__list-item">
+                            <span class="vacancies-block__list-title"><img src="{% static 'main/images/ellipse.svg'%}" alt="ellipse">Назва вакансії</span>
+                            <span class="vacancies-block__list-number">178</span>
+                        </li>
+                        <li class="vacancies-block__list-item">
+                            <span class="vacancies-block__list-title"><img src="{% static 'main/images/ellipse.svg'%}" alt="ellipse">Назва вакансії</span>
+                            <span class="vacancies-block__list-number">98</span>
+                        </li>
+                        <li class="vacancies-block__list-item">
+                            <span class="vacancies-block__list-title"><img src="{% static 'main/images/ellipse.svg'%}" alt="ellipse">Назва вакансії</span>
+                            <span class="vacancies-block__list-number">56</span>
+                        </li>
+                    </ul>
+                    <div class="vacancies-block__list-pagination">
+                        <div class="pagination__block">
+                            <div class="pagination">
+                                <a href="#"><img src="{% static 'main/images/vector-left.svg'%}" alt=""></a>
+                                <a class="active" href="#">1</a>
+                                <a href="#">2</a>
+                                <a href="#">...</a>
+                                <a href="#">6</a>
+                                <a href="#"><img src="{% static 'main/images/vector-right.svg'%}" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="vacancies-block">
+                    <div class="vacancies-block__top">
+                        <div class="vacancies-block__top-left">
+                            <img src=".{% static 'main/images/rectangle-5.svg'%}" alt="rectangle">
+                            <h2 class="vacancies-block__title">Популярні вакансії</h2>
+                        </div>
+                        <div class="vacancies-block__top-right">
+                            <a href="#" class="vacancies-block__link">Подивитись всі</a>
+                            <img src="{% static 'main/images/arrow-sm-right.svg'%}" alt="rectangle">
+                        </div>
+
+                    </div>
+                    <ul class="vacancies-block__list">
+                        <li class="vacancies-block__list-item">
+                            <span class="vacancies-block__list-title"><img src="{% static 'main/images/ellipse.svg'%}" alt="ellipse">Назва вакансії</span>
+                            <span class="vacancies-block__list-number">2177</span>
+                        </li>
+                        <li class="vacancies-block__list-item">
+                            <span class="vacancies-block__list-title"><img src="{% static 'main/images/ellipse.svg'%}" alt="ellipse">Назва вакансії</span>
+                            <span class="vacancies-block__list-number">353</span>
+                        </li>
+                        <li class="vacancies-block__list-item">
+                            <span class="vacancies-block__list-title"><img src="{% static 'main/images/ellipse.svg'%}" alt="ellipse">Назва вакансії</span>
+                            <span class="vacancies-block__list-number">234</span>
+                        </li>
+                        <li class="vacancies-block__list-item">
+                            <span class="vacancies-block__list-title"><img src="{% static 'main/images/ellipse.svg'%}" alt="ellipse">Назва вакансії</span>
+                            <span class="vacancies-block__list-number">178</span>
+                        </li>
+                        <li class="vacancies-block__list-item">
+                            <span class="vacancies-block__list-title"><img src="{% static 'main/images/ellipse.svg'%}" alt="ellipse">Назва вакансії</span>
+                            <span class="vacancies-block__list-number">98</span>
+                        </li>
+                        <li class="vacancies-block__list-item">
+                            <span class="vacancies-block__list-title"><img src="{% static 'main/images/ellipse.svg'%}" alt="ellipse">Назва вакансії</span>
+                            <span class="vacancies-block__list-number">56</span>
+                        </li>
+                    </ul>
+                    <div class="vacancies-block__list-pagination">
+                        <div class="pagination__block">
+                            <div class="pagination">
+                                <a href="#"><img src="{% static 'main/images/vector-left.svg'%}" alt=""></a>
+                                <a class="active" href="#">1</a>
+                                <a href="#">2</a>
+                                <a href="#">...</a>
+                                <a href="#">6</a>
+                                <a href="#"><img src=".{% static 'main/images/vector-right.svg'%}" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="resume">
+                <div class="resume__block">
+                    <div class="resume__block-left">
+                        <img src="{% static 'main/images/resume.svg'%}" alt="resume">
+                    </div>
+                    <div class="resume__block-right">
+                        <h2 class="resume__title">Розмістіть своє резюме</h2>
+                        <p class="resume__subtitle">Розмістивши на сайті своє резюме ви пришвидшите пошук роботи</p>
+                        <button class="resume__btn btn-color">Створити резюме</button>
+                    </div>
+                </div>
+            </section>
+            <section class="advices">
+                <div class="advices__block-wrapper">
+                    <div class="advices__block-top">
+                        <h2 class="advices__title">Поради та статті</h2>
+                        <div class="advices-block__top-right">
+                            <a href="#" class="advices-block__link">Подивитись всі</a>
+                            <img src="{% static 'main/images/arrow-sm-right.svg'%}" alt="rectangle">
+                        </div>
+                    </div>
+                    <ul class="advices__block">
+                        <li class="advices__block-item">
+                            <div class="advices__block-left">
+                                <img src="{% static 'main/images/image-icon.svg'%}" alt="advices">
+                            </div>
+                            <div class="advices__block-right">
+                                <p class="advices__subtitle">Як скласти вражаюче резюме:</p>
+                                <p class="advices__subtitle">крок за кроком із практичними порадами</p>
+                                <a href="" class="advices__link">Читати далі</a>
+                            </div>
+                        </li>
+                        <li class="advices__block-item">
+                            <div class="advices__block-left">
+                                <img src=".{% static 'main/images/image-icon.svg'%}" alt="advices">
+                            </div>
+                            <div class="advices__block-right">
+                                <p class="advices__subtitle">Як скласти вражаюче резюме:</p>
+                                <p class="advices__subtitle">крок за кроком із практичними порадами</p>
+                                <a href="" class="advices__link">Читати далі</a>
+                            </div>
+                        </li>
+                        <li class="advices__block-item">
+                            <div class="advices__block-left">
+                                <img src="{% static 'main/images/image-icon.svg'%}" alt="advices">
+                            </div>
+                            <div class="advices__block-right">
+                                <p class="advices__subtitle">Як скласти вражаюче резюме:</p>
+                                <p class="advices__subtitle">крок за кроком із практичними порадами</p>
+                                <a href="" class="advices__link">Читати далі</a>
+                            </div>
+                        </li>
+                        <li class="advices__block-item">
+                            <div class="advices__block-left">
+                                <img src="{% static 'main/images/image-icon.svg'%}" alt="advices">
+                            </div>
+                            <div class="advices__block-right">
+                                <p class="advices__subtitle">Як скласти вражаюче резюме:</p>
+                                <p class="advices__subtitle">крок за кроком із практичними порадами</p>
+                                <a href="" class="advices__link">Читати далі</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+            </section>
+        </div>
+    </main>
+</div>
+{% endblock %}
+<script src="{% static 'main/js/index.js' %}" ></script>
+</body>
+</html>

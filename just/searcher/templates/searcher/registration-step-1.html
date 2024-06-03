@@ -1,0 +1,83 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Головна</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+            rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'main/css/reset.css' %}"/>
+    <link rel="stylesheet" href="{% static 'main/css/style.css' %}"/>
+</head>
+<body>
+<div class="wrapper">
+    <main class="main">
+        <div class="container">
+           <section class="registration">
+               <div class="registration-content">
+                   <div class="stepper-wrapper">
+                       <div class="stepper-item step-completed">
+                           <div class="step-counter">1</div>
+                           <div class="step-name">Номер телефону</div>
+                       </div>
+                       <div class="stepper-item">
+                           <div class="step-counter">2</div>
+                           <div class="step-name">Підтвердження</div>
+                       </div>
+                       <div class="stepper-item">
+                           <div class="step-counter">3</div>
+                           <div class="step-name">Особисті дані</div>
+                       </div>
+                   </div>
+                   <h3 class="form__title">Реєстрація</h3>
+                   <div class="user__actions-registration">
+                       <ul class="user__actions">
+                           <li class="user__actions-item ">
+                               <a href="{% url 'register_seeker_step1' %}" class="user__actions-btn user__actions-btn-active">Пошукачу</a>
+                           </li>
+                           <li class="user__actions-item">
+                               <a href="{% url 'register_employer_step1' %}" class="user__actions-btn ">Роботодавцю</a>
+                           </li>
+                       </ul>
+                   </div>
+                   <form method="post" action="#" class="form">
+                       {% csrf_token %}
+                       {{ form.non_field_errors }}
+                       {% if form.errors %}
+                       <div class="form__errors">
+                           <ul>
+                               {% for error in form.errors.values %}
+                                   <li>{{ error }}</li>
+                               {% endfor %}
+                           </ul>
+                       </div>
+                       {% endif %}
+                       <div class="form__input-wrapper-registration-top-24">
+                           {{ form.phone }}
+                       </div>
+                       <div class="form__checkbox-wrapper">
+                           <label for="rules" class="label-hidden">Погоджуюсь з Політикою конфіденційності та
+                               Правилами користування Сайтом</label>
+                           <input type="checkbox" id="rules" name="rules" class="form__checkbox"/>
+                           <p class="form__checkbox-text">Я погоджуюсь з <a href="#" class="form__checkbox-link">Політикою
+                               конфідейності</a> та <a
+                                   href="#" class="form__checkbox-link">Правилами користування Сайтом</a></p>
+                       </div>
+                       <div class="form__submit-btn-wrapper">
+                           <input type="submit" class="form__submit-btn btn-color" value="Продовжити">
+                       </div>
+                       <p class="form__submit-btn-text">Вже є акаунт? <a
+                               href="#" class="form__submit-link">Увійти в акаунт</a></p>
+                   </form>
+                   <p class="form__text"></p>
+               </div>
+           </section>
+        </div>
+    </main>
+</div>
+<script src="{% static 'main/index.js' %}"></script>
+</body>
+</html>

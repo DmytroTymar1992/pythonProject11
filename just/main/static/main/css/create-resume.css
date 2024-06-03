@@ -1,0 +1,132 @@
+.create-resume__inner {
+    margin: 64px 0 80px;
+}
+
+.create-resume__content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    margin-top: 24px;
+    height: 100%;
+}
+
+.create-resume__content-left {
+    flex-basis: 732px;
+}
+
+.create-resume__content-right {
+    flex-basis: 352px;
+}
+.create-resume__article-right {
+    position: sticky;
+    top: 0;
+    flex-basis: 352px;
+}
+.create-resume__textarea-wrapper {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.create-resume__textarea {
+    width: 100%;
+    height: 72px;
+    border: 1px solid #B6B6B6;
+    border-radius: 16px;
+    padding: 16px 12px;
+
+}
+
+.create-resume__create-btn {
+    padding: 16px 88px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.create-resume__view-btn {
+    padding: 16px 121px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.create-resume__input-size-lg {
+    max-width: 509px;
+}
+
+.create-resume__input-size-md {
+    max-width: 485px;
+}
+
+.create-resume__item {
+    list-style-type: none;
+    display: flex;
+    gap: 16px;
+    flex-basis: 338px;
+}
+
+.create-resume__item-img {
+    width: 64px;
+    height: 64px;
+}
+
+.create-resume__item-text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.create-resume__item-title {
+    font-weight: 600;
+}
+
+.create-resume__item-description {
+    font-size: 14px;
+    color: var(--dark-grey);
+}
+
+.create-resume__btn {
+    padding: 17px 35px;
+    border-radius: 12px;
+    margin-top: 40px;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.create-resume__block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 32px;
+    border-radius: 16px;
+    background-color: var(--bg-color);
+}
+
+.create-resume__list {
+    display: flex;
+    gap: 20px;
+}
+
+.create-resume__photo {
+    height: 80px;
+    width: 80px;
+    border-radius: 24px;
+}
+
+.create-resume__select-block {
+    display: grid;
+    grid-template-columns: 130px 233px 130px;
+    gap: 8px;
+}
+
+.create-resume__double-select {
+    display: grid;
+    grid-template-columns: 246px 246px;
+    gap: 16px;
+}
+
+.create-resume__subtitle-description {
+    font-size: 14px;
+    margin-top: 12px;
+}

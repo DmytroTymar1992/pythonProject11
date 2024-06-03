@@ -1,0 +1,95 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Головна</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+            rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'css/reset.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+    <script type="text/javascript">
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+    </script>
+</head>
+<body>
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <img class="close" src="{% static 'images/close.svg' %}" alt="#"/>
+
+        <h3 class="form__title">Вхід</h3>
+        <div class="user__actions-registration">
+            <div class="modal-actions">
+                <a id="searchBtn" href="#" class="user__actions-btn user__actions-modal-active">Пошукачу</a>
+                <a id="employerBtn" href="#" class="user__actions-btn">Роботодавцю</a>
+            </div>
+        </div>
+
+        <form id="searcherForm" method="post" action="{% url 'seeker_login' %}" class="form">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <div class="login-searcher">
+                <div class="form__input-wrapper">
+                    <label class="label" for="phone">Номер телефону</label>
+                    <input type="tel" id="phone" name="username" class="form__input" placeholder="+(38_)"/>
+                </div>
+                <div class="form__input-wrapper">
+                    <label class="label" for="password-searcher">Пароль</label>
+                    <input type="password" id="password-searcher" name="password" class="form__input" placeholder="Введіть пароль"/>
+                </div>
+            </div>
+        </form>
+
+        <form id="employerForm" method="post" action="{% url 'employer_login' %}" class="form">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <div class="login-employer">
+                <div class="form__input-wrapper">
+                    <label class="label" for="email">Email</label>
+                    <input type="email" id="email" name="username" class="form__input" placeholder="Введіть email"/>
+                </div>
+                <div class="form__input-wrapper">
+                    <label class="label" for="password">Пароль</label>
+                    <input type="password" id="password" name="password" class="form__input" placeholder="Введіть пароль"/>
+                </div>
+            </div>
+        </form>
+
+        <div class="form__forgot-password-wrapper">
+            <a href="#" class="form__forgot-password-link">Забули пароль?</a>
+        </div>
+
+        <div class="form__submit-btn-wrapper">
+            <button id="submitBtn" class="form__submit-btn btn-color">Увійти</button>
+        </div>
+        <p class="form__submit-btn-text">
+            Немає акаунту?
+            <a href="{% url 'register_seeker_step1'%}" class="form__submit-link">Зареєструватись?</a>
+        </p>
+        <p class="form__text"></p>
+    </div>
+</div>
+
+<script src="{% static 'main/js/index.js' %}"></script>
+<script src="{% static 'main/js/login.js' %}"></script>
+</body>
+</html>

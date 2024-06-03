@@ -1,0 +1,9 @@
+<div class="error-page">
+    <h1>Помилки у формі</h1>
+    <ul>
+        {% for field, errors in errors.items %}
+            <li>{{ field }}: {{ errors|join:", " }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'edit_profile' %}">Повернутися до редагування профілю</a>
+</div>

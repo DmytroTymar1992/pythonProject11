@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Помилка реєстрації</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+            rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'main/css/reset.css' %}"/>
+    <link rel="stylesheet" href="{% static 'main/css/style.css' %}"/>
+</head>
+<body>
+<div class="wrapper">
+    <main class="main">
+        <div class="container">
+           <section class="registration">
+               <div class="registration-content">
+                   <h3 class="form__title">Помилка реєстрації</h3>
+                   <p class="form__subtitle">Виникла помилка під час реєстрації. Будь ласка, спробуйте ще раз.</p>
+                   {% if form_errors %}
+                       <ul class="form__errors">
+                           {% for field, errors in form_errors.items %}
+                               <li>{{ field }}: {{ errors|join:", " }}</li>
+                           {% endfor %}
+                       </ul>
+                   {% endif %}
+                   <a href="{% url 'register_seeker_step1' %}" class="form__submit-btn btn-color">Повернутись до реєстрації</a>
+               </div>
+           </section>
+        </div>
+    </main>
+</div>
+<script src="{% static 'main/index.js' %}"></script>
+</body>
+</html>
