@@ -3,6 +3,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from main.models import User
 from main.validators import EmployerPasswordValidator
+from django.contrib.auth import get_user_model
+from searcher.forms import SelectDateWidget
 
 class EmailVerificationForm(forms.Form):
     email = forms.EmailField(
@@ -80,6 +82,31 @@ class EmployerRegistrationForm(UserCreationForm):
         user = super().save(commit=False)
         user.role = 'employer'  # Явно встановлюємо роль роботодавця
         user.email = self.cleaned_data.get('email')
+        if commit:
+            user.save()
+        return user
+
+
+
+User = get_user_model()
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'city', 'birthday', 'phone', 'email', 'avatar']
+        widgets = {
+            'birthday': SelectDateWidget(),
+            'first_name': forms.TextInput(attrs={'class': 'form__input input-size-lg'}),
+            'last_name': forms.TextInput(attrs={'class': 'form__input input-size-lg'}),
+            'city': forms.TextInput(attrs={'class': 'form__input input-size-lg'}),
+            'phone': forms.TextInput(attrs={'class': 'form__input input-size-lg'}),
+            'email': forms.EmailInput(attrs={'class': 'form__input input-size-lg'}),
+            'avatar': forms.ClearableFileInput(attrs={'class': 'form__input input-size-lg'}),
+        }
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        if 'password' not in self.changed_data:
+            user.password = User.objects.get(pk=user.pk).password
         if commit:
             user.save()
         return user

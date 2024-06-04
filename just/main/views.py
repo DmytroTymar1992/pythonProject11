@@ -25,3 +25,6 @@ def seeker_login_view(request):
     else:
         form = SeekerLoginForm()
     return render(request, 'main/seeker_login.html', {'form': form, 'next': next_url})
+
+
+

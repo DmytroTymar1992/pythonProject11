@@ -52,12 +52,12 @@
                     <button class="header__create-btn btn-transparent">Створити вакансію</button>
                 </a>
                 <img src="{% static 'main/images/bell.svg' %}" alt="bell" class="header__bell">
+                <a href="{% url 'employer_profile' %}">
                 <div class="header__user-block">
-                    <a href="{% url 'edit_profile' %}">
                         <img src="{% static 'main/images/header-img.svg' %}" alt="header__profile-img" class="header__profile-img">
                         <p class="header__user-name">{{ user.first_name }} {{ user.last_name }}</p>
-                    </a>
                 </div>
+                </a>
                 {% endif %}
             </div>
             {% else %}

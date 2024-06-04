@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
-from .forms import EmailVerificationForm, EmployerRegistrationForm, EmailConfirmationCodeForm
+from .forms import EmailVerificationForm, EmployerRegistrationForm, EmailConfirmationCodeForm, UserProfileForm
 from django.contrib.auth import login
 import logging
-
+from company.models import Vacancy
 logger = logging.getLogger(__name__)
 
 def register_employer_step1(request):
@@ -52,3 +52,40 @@ def register_employer_step3(request):
 
 def registration_error(request):
     return render(request, 'employer/registration-error.html')
+
+
+
+
+def edit_profile(request):
+    user = request.user
+    if user.role != 'employer':
+        return redirect('home')  # або інша сторінка, якщо користувач не пошуковець
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            if 'delete_avatar' in request.POST:
+                user.avatar.delete(save=True)
+            else:
+                if 'avatar' in request.FILES:
+                    user.avatar = request.FILES['avatar']
+            form.save()
+            return redirect('edit_profile')  # Перенаправлення на сторінку профілю після збереження
+        else:
+            # Збереження помилок у сесії
+            request.session['form_errors'] = form.errors.as_json()
+            return redirect('error_page')  # Перенаправлення на сторінку помилок
+    else:
+        form = UserProfileForm(instance=user)
+
+    return render(request, 'employer/personal-1.html', {'form': form})
+
+
+def profile_vacancy_list(request):
+    user = request.user
+    company = user.company  # Отримуємо компанію, до якої належить користувач
+    if company:
+        vacancies = Vacancy.objects.filter(company=company)  # Знаходимо вакансії, які належать цій компанії
+    else:
+        vacancies = Vacancy.objects.none()  # Якщо користувач не належить до компанії, повертаємо пустий QuerySet
+    return render(request, 'employer/personal-2.html', {'vacancies': vacancies})
