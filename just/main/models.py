@@ -40,8 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     city = models.CharField(max_length=100, null=True, blank=True)
     birthday = models.DateField(null=True, blank=True)
     date_created = models.DateTimeField(default=timezone.now)
-    company = models.ForeignKey(Company, null=True, blank=True, on_delete=models.SET_NULL,
-                                limit_choices_to={'users__role': 'employer'}, related_name='users')
+    company = models.ForeignKey(Company, null=True, blank=True, on_delete=models.SET_NULL, related_name='users')
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

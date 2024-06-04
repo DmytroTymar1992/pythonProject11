@@ -63,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'just.urls'
@@ -171,4 +172,7 @@ LOGGING = {
 
 
 
+
+# Переконайтеся, що встановлені відповідні налаштування сесії
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Використовуємо базу даних для сесій
 

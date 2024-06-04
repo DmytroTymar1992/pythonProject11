@@ -17,21 +17,20 @@ class VacancyForm(forms.ModelForm):
         fields = [
             'position_name', 'position_comment', 'city', 'address', 'phone_number',
             'min_salary', 'max_salary', 'hashtags', 'employment_type',
-            'work_type', 'description', 'social_networks', 'company', 'status'
+            'work_type', 'description', 'social_networks', 'status'
         ]
         widgets = {
             'position_comment': forms.TextInput(attrs={'class': 'form-control'}),
             'city': forms.TextInput(attrs={'class': 'form-control'}),
             'address': forms.TextInput(attrs={'class': 'form-control'}),
             'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
-            'min_salary': forms.NumberInput(attrs={'class': 'form-control'}),
-            'max_salary': forms.NumberInput(attrs={'class': 'form-control'}),
+            'min_salary': forms.NumberInput(attrs={'class': 'form__input'}),
+            'max_salary': forms.NumberInput(attrs={'class': 'form__input'}),
             'hashtags': forms.SelectMultiple(attrs={'class': 'form-control'}),
             'employment_type': forms.Select(attrs={'class': 'form-control'}),
             'work_type': forms.Select(attrs={'class': 'form-control'}),
-            'description': forms.Textarea(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'create-vacancy__textarea'}),
             'social_networks': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'company': forms.Select(attrs={'class': 'form-control'}),
             'status': forms.Select(attrs={'class': 'form-control'}),
         }
 

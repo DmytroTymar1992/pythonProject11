@@ -1,80 +1,26 @@
+{% extends "main/base.html" %}
 {% load crispy_forms_tags %}
 {% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
     <title>Створення вакансії</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link
-            href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
-            rel="stylesheet"
-    />
-    <link rel="stylesheet" href="{% static 'main/css/reset.css' %}"/>
-    <link rel="stylesheet" href="{% static 'main/css/style.css' %}"/>
+    {% block extra_styles %}
+
     <link rel="stylesheet" href="{% static 'main/css/create-vacancy.css' %}"/>
+    {% endblock %}
 </head>
 <body>
 <div class="wrapper">
-    <header class="header">
-        <div class="container">
-            <div class="header__inner">
-                <div class="header__inner-left">
-                    <a class="header__logo" href="#"
-                    ><img src="../../images/logo.svg" alt="logo" class="logo__img"
-                    /></a>
-                    <nav class="menu">
-                        <ul class="menu__list">
-                            <li class="menu__list-item">
-                                <a href="#" class="menu__link">Про компанію</a>
-                            </li>
-                            <li class="menu__list-item">
-                                <a href="#" class="menu__link">Новини</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-                <div class="header__inner-right">
-                    <button class="header__create-btn btn-transparent">
-                        Створити резюме
-                    </button>
-                    <img
-                            src="../../images/bell.svg"
-                            alt="bell"
-                            class="header__bell"
-                    />
-                    <div class="header__user-block">
-                        <img
-                                src="../../images/header-img.svg"
-                                alt="header__profile-img"
-                                class="header__profile-img"
-                        />
-                        <p class="header__user-name">Ім’я користувача</p>
-                    </div>
-                </div>
-                <!--                <div class="user">-->
-                <!--                    <ul class="user__actions">-->
-                <!--                        <li class="user__actions-item ">-->
-                <!--                            <a href="#" class="user__actions-btn">Пошукачу</a>-->
-                <!--                        </li>-->
-                <!--                        <li class="user__actions-item">-->
-                <!--                            <a href="#" class="user__actions-btn user__actions-btn-active">Роботодавцю</a>-->
-                <!--                        </li>-->
-                <!--                    </ul>-->
-                <!--                    <a href="#" class="search__link">-->
-                <!--                        <img src="../../images/log-in.svg" alt="search" class="search__img"><span>Увійти</span></a>-->
-                <!--                </div>-->
-            </div>
-        </div>
-    </header>
-
+    {% block content %}
     <main>
         <div class="container">
             <div class="create-vacancy__inner">
                 <h1 class="title-xl">Створення вакансії</h1>
                 <div class="create-vacancy__content-wrapper">
                     <section class="create-vacancy__content-left">
-                        <form class="form__inner">
+                        <form class="form__inner" method="post">
+                            {% csrf_token %}
                             <fieldset class="form-field">
                                 <h3 class="form__subtitle-md">Основна інформація</h3>
                                 <div class="form__inputs-wrapper">
@@ -85,18 +31,8 @@
                                         {{ form.position_name }}
                                     </div>
                                     <div class="form__input-horizontal-wrapper">
-                                        <label for="sale" class="text-medium-16"
-                                        >Категорія</label
-                                        >
-                                        <select
-                                                id="sale"
-                                                class="form__input form__select create-vacancy__input-size"
-                                        >
-                                            <option>Продаж, закупівля</option>
-                                            <option>Харьков</option>
-                                            <option>Одесса</option>
-                                            <option>Львов</option>
-                                        </select>
+                                        <label for="id_category" class="text-medium-16">Категорія</label>
+                                        <div id="category_list"></div>
                                     </div>
                                 </div>
                             </fieldset>
@@ -107,53 +43,23 @@
                                         <label for="place" class="text-medium-16"
                                         >Місто роботи</label
                                         >
-                                        <select
-                                                id="place"
-                                                class="form__input form__select create-vacancy__input-size"
-                                        >
-                                            <option>Місто</option>
-                                            <option>Харьков</option>
-                                            <option>Одесса</option>
-                                            <option>Львов</option>
-                                        </select>
+                                        {{ form.city }}
                                     </div>
                                     <div class="form__input-horizontal-wrapper">
                                         <label for="address" class="text-medium-16"
                                         >Адреса роботи</label
                                         >
-                                        <input
-                                                id="address"
-                                                class="form__input create-vacancy__input-size"
-                                                type="text"
-                                                placeholder="Вулиця та будинок"
-                                        />
+                                        {{ form.address }}
                                     </div>
                                     <div class="form__input-horizontal-wrapper">
                                         <label class="text-medium-16">Зарплата</label>
                                         <div class="input-salary-right">
                                             <label for="from" class="label-hidden">from</label>
-                                            <input
-                                                    id="from"
-                                                    class="form__input"
-                                                    type="text"
-                                                    placeholder="від"
-                                            />
+                                            {{ form.min_salary }}
                                             <span>-</span>
                                             <label for="to" class="label-hidden"></label>
-                                            <input
-                                                    id="to"
-                                                    class="form__input"
-                                                    type="text"
-                                                    placeholder="до"
-                                            />
-                                            <div class="form__input-btn-wrapper">
-                                                <button
-                                                        class="salary__input-btn salary__input-btn-active"
-                                                >
-                                                    ₴
-                                                </button>
-                                                <button class="salary__input-btn">$</button>
-                                            </div>
+                                            {{ form.max_salary }}
+
                                         </div>
                                     </div>
                                     <div class="form__input-horizontal-wrapper">
@@ -269,11 +175,7 @@
                                     <label for="desc-role" class="label-hidden"
                                     >Адреса роботи</label
                                     >
-                                    <textarea
-                                            id="desc-role"
-                                            class="create-vacancy__textarea"
-                                            maxlength="500"
-                                    ></textarea>
+                                    {{ form.description }}
                                 </div>
                                 <p class="textarea-description">
                                     Вимоги, обов’язки, проект, умови праці. Використовуйте
@@ -281,6 +183,8 @@
                                     для bold
                                 </p>
                             </fieldset>
+                            {{ form.status }}
+
                             <div class="form__button-wrapper">
                                 <button
                                         type="submit"
@@ -314,89 +218,46 @@
             </div>
         </div>
     </main>
-
-    <footer class="footer">
-        <div class="container">
-            <div class="footer__inner">
-                <ul class="footer__list">
-                    <li class="footer__list-item">
-                        <a href="#" class="footer__link">Про компанію</a>
-                    </li>
-                    <li class="footer__list-item">
-                        <a href="#" class="footer__link">Контакти</a>
-                    </li>
-                    <li class="footer__list-item">
-                        <a href="#" class="footer__link">Допомога</a>
-                    </li>
-                </ul>
-                <ul class="footer__list">
-                    <li class="footer__list-item">
-                        <a href="#" class="footer__link">Корисні новини</a>
-                    </li>
-                    <li class="footer__list-item">
-                        <a href="#" class="footer__link">Оферта</a>
-                    </li>
-                    <li class="footer__list-item">
-                        <a href="#" class="footer__link">Умови користування</a>
-                    </li>
-                    <li class="footer__list-item">
-                        <a href="#" class="footer__link">Політика конфеденційності</a>
-                    </li>
-                </ul>
-                <ul class="footer__list">
-                    <li class="footer__list-item">
-                        <a href="#" class="footer__link">Фейсбук</a>
-                    </li>
-                    <li class="footer__list-item">
-                        <a href="#" class="footer__link">Телеграм</a>
-                    </li>
-                    <li class="footer__list-item">
-                        <a href="#" class="footer__link">Вайбер</a>
-                    </li>
-                    <li class="footer__list-item">
-                        <a href="#" class="footer__link">Інстаграм</a>
-                    </li>
-                </ul>
-                <ul class="footer__list">
-                    <li class="footer__list-item">
-                        <a href="#" class="footer__link"
-                        ><img
-                                src="../../images/logo.svg"
-                                alt="logo"
-                                class="logo__img"
-                        /></a>
-                    </li>
-                    <li class="footer__list-item">
-                        <a href="#" class="footer__btn btn-transparent"
-                        >Для роботодавця</a
-                        >
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </footer>
+    {% endblock %}
 </div>
-<script src="../../index.js"></script>
+{% block extra_js %}
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script>
-        $(function() {
+        <script>
+            $(function() {
             $('#id_position_name').autocomplete({
-                source: function(request, response) {
+                source: function (request, response) {
                     $.ajax({
                         url: "",
                         dataType: "json",
                         data: {
                             term: request.term
                         },
-                        success: function(data) {
+                        success: function (data) {
                             response(data);
                         }
                     });
                 },
                 minLength: 2,
+                select: function (event, ui) {
+                    // Handle the category loading here
+                    $.ajax({
+                        url: "{% url 'get_categories' %}",
+                        data: {
+                            position: ui.item.value
+                        },
+                        success: function (data) {
+                            var categoryList = $('#category_list');
+                            categoryList.empty();
+                            $.each(data, function (key, value) {
+                                categoryList.append('<p>' + value + '</p>');
+                            });
+                        }
+                    });
+                }
             });
         });
     </script>
+{% endblock %}
 </body>
 </html>
