@@ -1,5 +1,5 @@
 .personal__inner {
-    margin: 64px 0 80px;
+    margin: 64px 0 160px;
 }
 
 .personal__content-wrapper {
@@ -23,8 +23,8 @@
 .personal__content-left-wrapper {
     display: flex;
     flex-direction: column;
-    padding: 0 24px 24px;
-    background-color: var(--bg-color);
+    padding: 32px 12px;
+    background-color: var(--bg-white);
     border-radius: 16px;
     height: 100%;
 }
@@ -56,7 +56,7 @@
     justify-content: space-between;
     gap: 8px;
     border-radius: 16px;
-    background-color: var(--bg-color);
+    background-color: var(--bg-white);
     padding: 24px;
 }
 
@@ -66,7 +66,7 @@
     justify-content: space-between;
     gap: 8px;
     border-radius: 16px;
-    background-color: var(--bg-color);
+    background-color: var(--bg-white);
     padding: 24px;
 }
 
@@ -82,9 +82,15 @@
     align-items: center;
 }
 
+.personal__package-name{
+    padding: 12px 24px;
+    border-radius: 8px;
+}
+
+
 .personal__item-info-wrapper {
     display: flex;
-    gap: 16px;
+    gap: 32px;
     background-color: #F1F1F1;
     border-radius: 8px;
     padding: 8px 16px;
@@ -120,12 +126,24 @@
     padding: 12px 0;
     width: 100%;
     border-radius: 8px;
-    font-size: 16px;
-    font-weight: 500;
 }
 
 .personal-hashtags {
-    display: inline;;
+    display: inline;
+    font-size: 14px;
+    padding: 8px 24px;
+    height: 30px;
+    border-radius: 8px;
+}
+
+.personal__card-company-info {
+    display: flex;
+    gap: 60px;
+    align-items: center;
+    justify-content: flex-start;
+}
+.personal__company-block-wrapper{
+    margin: 16px 0 24px;
 }
 
 .personal__hashtag-wrapper {
@@ -133,12 +151,13 @@
 }
 
 .personal__logout__link-wrapper {
-    margin-top: 32px;
+    margin: 32px 12px 0;
 }
 
 .personal__filter-block {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-bottom: 8px;
 }
 
@@ -181,29 +200,166 @@
 }
 
 .personal__card-bottom-btn {
-    padding: 16px 40px;
+    padding: 16px 43px;
     border-radius: 8px;
 }
 
 .personal__btn-color {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--dark-grey);
-    color: #ffffff;
-    border: none;
-    cursor: pointer;
-    padding: 16px 24px;
+    padding: 16px 66px;
     border-radius: 8px;
 }
 
 .personal__btn-transparent {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: transparent;
-    border: 1px solid #303030;
-    cursor: pointer;
-    padding: 16px 56px;
+    padding: 16px 43px;
     border-radius: 8px;
+}
+.personal__checkbox-block-list{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.personal__checkbox-block-item{
+    list-style-type: none;
+}
+
+.personal__checkbox-text{
+    font-size: 12px;
+    color: var(--black);
+}
+
+.personal__container-label {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.personal__container-label p {
+    margin-top: 4px;
+}
+
+.personal__container-label input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.personal__checkmark {
+    position: absolute;
+    top: -4px;
+    left: 9px;
+    height: 18px;
+    width: 18px;
+    border-radius: 4px;
+    background-color: white;
+    border: 1px solid var(--grey-2);
+}
+
+.personal__container-label:hover input ~ .checkmark {
+    background-color: transparent;
+}
+
+.personal__container-label input:checked ~ .personal__checkmark {
+    background-color: var(--green);
+    border: 1px solid var(--green);
+}
+
+.personal__checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.personal__container-label input:checked ~ .personal__checkmark:after {
+    display: block;
+}
+
+.personal__container-label .personal__checkmark:after {
+    left: 7px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.personal__card-title-right{
+    display: flex;
+    padding: 4px 0;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.personal__card-subtitle{
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    animation: fadeIn 0.3s;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1001; /* Ensure it's always on top */
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+}
+
+.img-container {
+    width: 100%;
+    max-height: 400px;
+    overflow: hidden;
+    position: relative;
+    margin: 20px;
+}
+
+.img-container img {
+    width: 100%;
+    height: auto;
+    display: block;
 }

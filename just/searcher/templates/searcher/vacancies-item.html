@@ -1,0 +1,405 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% load filters %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Вакансія</title>
+    {% block extra_styles %}
+    <link rel="stylesheet" href="{% static 'main/css/vacancies-item.css' %}">
+    {% endblock %}
+</head>
+<body>
+<div class="wrapper">
+    {% block content %}
+    <main class="main">
+        <div class="container">
+            <div class="vacancy-wrapper">
+                <section class="vacancy">
+                    <div class="vacancies-item__top-wrapper">
+                        <ul class="breadcrumb-back">
+                            <li><a class="breadcrumb-item breadcrumb-active" href="#">Результати пошуку</a></li>
+                        </ul>
+
+                        <div class="vacancies-item__top-right">
+                            <button class="button-save text-medium-16">
+                                <img class="button-save__img" src="{% static 'main/images/heart.svg' %}" alt="heart">
+                                Зберегти
+                            </button>
+                            <div class="vacancies-item__inner">
+                                <a href="#" class="vacancies-item__btn btn-color">Відгукнутись</a>
+                                <img class="vacancies-item__more-vertical" src="{% static 'main/images/more-vertical.svg' %}"
+                                     alt="more-vertical">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="vacancy__hashtags-wrapper">
+                        <nav>
+                            <ul class="vacancies__card-hashtags">
+                                {% if vacancy.status == 'hot' %}
+                                    <li class="vacancies__card-hashtags-item hashtags-hot">
+                                        <img src="{% static 'main/images/local_fire.svg' %}" alt="fire">
+                                        <a href="#" class="vacancies__card-hashtags-link">
+                                            Гаряча вакансія
+                                        </a>
+                                    </li>
+                                    {% endif %}
+                                    {% if vacancy.hashtags.all %}
+                                        {% for hashtag in vacancy.hashtags.all %}
+                                            <li class="vacancies__card-hashtags-item type-purple-italic">
+                                                <a href="#" class="vacancies__card-hashtags-link">
+                                                    {{ hashtag.name }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+
+                    <h1 class="vacancy__title">{{ vacancy.position.name }}</h1>
+                    <div class="vacancy__company-info-wrapper">
+                        <div class="vacancy__company-info">
+                            <div class="vacancies__card-company-logo">
+                                <img class="vacancies__card-company-img" src="{% static 'main/images/image-icon.svg' %}" alt="logo">
+                            </div>
+                            <div class="vacancy__company-info-text">
+                                <p class="title-sm">{{ vacancy.company.name }}</p>
+                                <p class="vacancy__company-description">Роздрібна торгівля, {{ vacancy.company.get_number_of_employees_display }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="vacancy__requirements">
+                        <ul class="vacancy__requirements-list">
+                            <li class="vacancy__requirements-item">
+                                {% if vacancy.min_salary and vacancy.max_salary %}
+                                <img class="vacancy__requirements-img" src="{% static 'main/images/money-blue.svg' %}" alt="checked">
+                                <div class="vacancy__requirements-description">
+                                    <div class="text-btn">
+                                            {{ vacancy.min_salary|intspace }} - {{ vacancy.max_salary|intspace }} ₴
+                                    </div>
+                                </div>
+                                {% elif vacancy.min_salary %}
+                                <img class="vacancy__requirements-img" src="{% static 'main/images/money-blue.svg' %}" alt="checked">
+                                <div class="vacancy__requirements-description">
+                                    <div class="text-btn">
+                                            Від {{ vacancy.min_salary|intspace }} ₴
+                                    </div>
+                                </div>
+                                {% elif vacancy.max_salary %}
+                                <img class="vacancy__requirements-img" src="{% static 'main/images/money-blue.svg' %}" alt="checked">
+                                <div class="vacancy__requirements-description">
+                                    <div class="text-btn">
+                                            До {{ vacancy.max_salary|intspace }} ₴
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </li>
+                            <li class="vacancy__requirements-item">
+                                <img class="vacancy__requirements-img" src="{% static 'main/images/location-blue.svg' %}" alt="checked">
+                                <div class="vacancy__requirements-description">
+                                    <p class="vacancy__requirements-text">{{ vacancy.city.name }}, {{ vacancy.address }}</p>
+
+                                    <div class="vacancy__requirements-coincidence-block">
+
+                                        <div class="requirements-map-block">
+                                            <a href="https://www.google.com/maps/search/?api=1&query={{ vacancy.city.name|urlencode }}%20{{ vacancy.address|urlencode }}" target="_blank" class="requirements-map-block">
+                                                <img src="{% static 'main/images/map.svg' %}" alt="map">
+                                                <p>На мапі</p>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="vacancy__requirements-item">
+                                <img class="vacancy__requirements-img" src="{% static 'main/images/leng-blue.svg' %}" alt="checked">
+                                <div class="vacancy__requirements-description">
+                                    <p class="vacancy__requirements-text">Англійська: Upper Intermediate</p>
+
+                                </div>
+                            </li>
+                            <li class="vacancy__requirements-item">
+                                <img class="vacancy__requirements-img" src="{% static 'main/images/check-mark-blue.svg' %}" alt="checked">
+                                <div class="vacancy__requirements-description">
+                                    <p class="vacancy__requirements-text">Повна зайнятість</p>
+
+                                </div>
+                            </li>
+                            <li class="vacancy__requirements-item">
+                                <img class="vacancy__requirements-img" src="{% static 'main/images/money-bag.svg' %}" alt="checked">
+                                <div class="vacancy__requirements-description">
+                                    <p class="vacancy__requirements-text">Від 2-х років досвіду</p>
+
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="vacancy__hashtags-wrapper">
+                        <nav>
+                            <ul class="vacancies__card-hashtags">
+                                <li class="vacancies__card-hashtags-item">
+                                    <a href="#" class="vacancies__card-hashtags-link">Навчання</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="vacancy__description-wrapper">
+                        <h2 class="vacancy__description-title-text">Опис вакансії</h2>
+
+                        <div class="vacancy__description-text-wrapper">
+                            <div class="vacancy__description-text">{{ vacancy.description|safe }}</div>
+                        </div>
+
+                        <p class="vacancy__description-subtitle-text">Контактні дані</p>
+                        <div class="vacancy__contact-wrapper">
+                            <p class="vacancy__contact-number">Показати номер</p>
+                            <span class="vacancy__contact-service">Vodafone</span>
+                        </div>
+                        <div class="vacancy__contact-wrapper">
+                            <p class="vacancy__contact-number">Показати номер</p>
+                            <span class="vacancy__contact-service">Київстар</span>
+                        </div>
+                        <div class="vacancy__social-block-wrapper">
+                            <ul class="social-block-list">
+                                <li class="social-block-item">
+                                    <a href="#" class="social-block-link">
+                                        <img class="social-block-img" src="{% static 'main/images/social/facebook.svg' %}"
+                                             alt="facebook">
+                                    </a>
+                                </li>
+                                <li class="social-block-item">
+                                    <a href="#" class="social-block-link">
+                                        <img class="social-block-img" src="{% static 'main/images/social/linkedin.svg' %}"
+                                             alt="telegram">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <p class="vacancy__publish-data">Опубліковано 6 березня 2024 року</p>
+                        <div class="vacancy__card-bottom-wrapper">
+                            <div class="vacancies__card-bottom">
+                                <div class="vacancies__card-bottom-buttons">
+                                    <a href="#" class="vacancies__card-bottom-btn btn-color">Відгукнутись</a>
+                                    <a href="#" class="vacancies__card-bottom-btn btn-transparent">Передзвоніть мені</a>
+                                </div>
+                                <button class="button-save text-medium-16">
+                                    <img class="button-save__img" src="{% static 'main/images/heart.svg' %}" alt="heart">
+                                    Зберегти
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+                <aside class="vacancy__sidebar">
+                    <div class="vacancy__sidebar-similar-vacancies">
+                        <h3 class="vacancy__sidebar-title">
+                            Схожі вакансії
+                        </h3>
+                        <ul class="vacancy__sidebar-list">
+                            <li class="vacancy__sidebar-item">
+                                <div class="card-mini">
+                                    <h5 class="card-mini__title">Менеджер з продажу</h5>
+                                    <div class="card-mini__company-info-wrapper">
+                                        <div class="vacancy__company-info">
+                                            <div class="vacancies__card-mini__company-logo">
+                                                <img class="vacancies__card-company-img"
+                                                     src="{% static 'main/images/image-icon.svg' %}" alt="logo">
+                                            </div>
+                                            <div class="vacancy__company-info-text">
+                                                <p class="vacancy__company-name">Назва компанії</p>
+                                                <div class="location-block">
+                                                    <img class="location-img" src="{% static 'main/images/marker-pin-01.svg' %}"
+                                                         alt="location">
+                                                    <p class="location-text">Дніпро</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-mini__requirements-wrapper">
+                                        <div class="vacancy__requirements-item">
+                                            <img class="vacancy__requirements-img" src="{% static 'main/images/money-2.svg' %}"
+                                                 alt="checked">
+                                            <div class="vacancy__requirements-description">
+                                                <p class="vacancy__requirements-text"><strong>8 000 - 10 000₴</strong>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="vacancies__card-bottom-buttons">
+                                        <a href="#" class="card-mini__btn btn-color">Відгукнутись</a>
+                                        <a href="#" class="card-mini__btn btn-transparent">Детальніше</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="vacancy__sidebar-item">
+                                <div class="card-mini">
+                                    <h5 class="card-mini__title">Менеджер з продажу</h5>
+                                    <div class="card-mini__company-info-wrapper">
+                                        <div class="vacancy__company-info">
+                                            <div class="vacancies__card-mini__company-logo">
+                                                <img class="vacancies__card-company-img"
+                                                     src="{% static 'main/images/image-icon.svg' %}" alt="logo">
+                                            </div>
+                                            <div class="vacancy__company-info-text">
+                                                <p class="vacancy__company-name">Назва компанії</p>
+                                                <div class="location-block">
+                                                    <img class="location-img" src="{% static 'main/images/marker-pin-01.svg' %}"
+                                                         alt="location">
+                                                    <p class="location-text">Дніпро</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-mini__requirements-wrapper">
+                                        <div class="vacancy__requirements-item">
+                                            <img class="vacancy__requirements-img" src="{% static 'main/images/money-2.svg' %}"
+                                                 alt="checked">
+                                            <div class="vacancy__requirements-description">
+                                                <p class="vacancy__requirements-text"><strong>8 000 - 10 000₴</strong>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="vacancies__card-bottom-buttons">
+                                        <a href="#" class="card-mini__btn btn-color">Відгукнутись</a>
+                                        <a href="#" class="card-mini__btn btn-transparent">Детальніше</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="vacancy__sidebar-item">
+                                <div class="card-mini">
+                                    <h5 class="card-mini__title">Менеджер з продажу</h5>
+                                    <div class="card-mini__company-info-wrapper">
+                                        <div class="vacancy__company-info">
+                                            <div class="vacancies__card-mini__company-logo">
+                                                <img class="vacancies__card-company-img"
+                                                     src="{% static 'main/images/image-icon.svg' %}" alt="logo">
+                                            </div>
+                                            <div class="vacancy__company-info-text">
+                                                <p class="vacancy__company-name">Назва компанії</p>
+                                                <div class="location-block">
+                                                    <img class="location-img" src="{% static 'main/images/marker-pin-01.svg' %}"
+                                                         alt="location">
+                                                    <p class="location-text">Дніпро</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-mini__requirements-wrapper">
+                                        <div class="vacancy__requirements-item">
+                                            <img class="vacancy__requirements-img" src="{% static 'main/images/money-2.svg' %}"
+                                                 alt="checked">
+                                            <div class="vacancy__requirements-description">
+                                                <p class="vacancy__requirements-text"><strong>8 000 - 10 000₴</strong>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="vacancies__card-bottom-buttons">
+                                        <a href="#" class="card-mini__btn btn-color">Відгукнутись</a>
+                                        <a href="#" class="card-mini__btn btn-transparent">Детальніше</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="vacancy__sidebar-btn-wrapper">
+                            <a href="#" class="vacancy__sidebar-btn btn-transparent">Завантажити ще</a>
+                        </div>
+                    </div>
+                    <div class="vacancy__sidebar-company-vacancies">
+                        <h3 class="vacancy__sidebar-title">
+                            Вакансії цієї компанії
+                        </h3>
+                        <ul class="vacancy__sidebar-list">
+                            <li class="vacancy__sidebar-item">
+                                <div class="card-mini">
+                                    <h5 class="card-mini__title">Менеджер з продажу</h5>
+                                    <div class="card-mini__company-info-wrapper">
+                                        <div class="vacancy__company-info">
+                                            <div class="vacancies__card-mini__company-logo">
+                                                <img class="vacancies__card-company-img"
+                                                     src="{% static 'main/images/image-icon.svg' %}" alt="logo">
+                                            </div>
+                                            <div class="vacancy__company-info-text">
+                                                <p class="vacancy__company-name">Назва компанії</p>
+                                                <div class="location-block">
+                                                    <img class="location-img" src="{% static 'main/images/marker-pin-01.svg' %}"
+                                                         alt="location">
+                                                    <p class="location-text">Дніпро</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-mini__requirements-wrapper">
+                                        <div class="vacancy__requirements-item">
+                                            <img class="vacancy__requirements-img" src="{% static 'main/images/money-2.svg' %}"
+                                                 alt="checked">
+                                            <div class="vacancy__requirements-description">
+                                                <p class="vacancy__requirements-text"><strong>8 000 - 10 000₴</strong>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="vacancies__card-bottom-buttons">
+                                        <a href="#" class="card-mini__btn btn-color">Відгукнутись</a>
+                                        <a href="#" class="card-mini__btn btn-transparent">Детальніше</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="vacancy__sidebar-item">
+                                <div class="card-mini">
+                                    <h5 class="card-mini__title">Менеджер з продажу</h5>
+                                    <div class="card-mini__company-info-wrapper">
+                                        <div class="vacancy__company-info">
+                                            <div class="vacancies__card-mini__company-logo">
+                                                <img class="vacancies__card-company-img"
+                                                     src="{% static 'main/images/image-icon.svg' %}" alt="logo">
+                                            </div>
+                                            <div class="vacancy__company-info-text">
+                                                <p class="vacancy__company-name">Назва компанії</p>
+                                                <div class="location-block">
+                                                    <img class="location-img" src="{% static 'main/images/marker-pin-01.svg' %}"
+                                                         alt="location">
+                                                    <p class="location-text">Дніпро</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-mini__requirements-wrapper">
+                                        <div class="vacancy__requirements-item">
+                                            <img class="vacancy__requirements-img" src="{% static 'main/images/money-2.svg' %}"
+                                                 alt="checked">
+                                            <div class="vacancy__requirements-description">
+                                                <p class="vacancy__requirements-text"><strong>8 000 - 10 000₴</strong>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="vacancies__card-bottom-buttons">
+                                        <a href="#" class="card-mini__btn btn-color">Відгукнутись</a>
+                                        <a href="#" class="card-mini__btn btn-transparent">Детальніше</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                </aside>
+            </div>
+
+
+        </div>
+    </main>
+    {% endblock %}
+</div>
+<script src="../../index.js"></script>
+</body>
+</html>

@@ -1,0 +1,424 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% load filters %}
+
+    {% block extra_styles %}
+    <link rel="stylesheet" href="{% static 'main/css/candidate-item.css' %}">
+    {% endblock %}
+{% block content %}
+<div class="wrapper">
+    <main class="main">
+        <div class="container">
+
+            <div class="candidate-item__wrapper">
+                <div class="candidate-item__left">
+                    <div class="candidate-item__actions-wrapper">
+                        <ul class="breadcrumb-list">
+                            <li>
+
+                            </li>
+                        </ul>
+                        <div class="candidate-item__actions-left">
+                            <label class="heart-icon__label text-medium-16">
+
+                            </label>
+                            <div class="candidate-item__inner">
+                                <a href="#" class="candidate-item__btn-top btn-color">Редагувати</a>
+                                <img class="more-vertical-icon" src="{% static 'main/images/more-vertical.svg' %}"
+                                     alt="more-vertical">
+                                <div class="loading-icon-wrapper">
+                                    <label for="desc-resume" class="loading-label">
+                                        <img class="more-vertical-icon" src="{% static 'main/images/loading.svg' %}" alt="loading">
+                                    </label>
+                                    <input
+                                            id="desc-resume"
+                                            type="file"
+                                            style="display: none"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <section>
+                        <div class="candidate-item__candidate-wrapper">
+                            <div class="candidate-item__top-wrapper">
+                                <p class="resume-info-text-grey-3">Резюме від 29 березня 2024</p>
+                                <div class="candidate-item__resume-block">
+                                    <img class="candidate-item__resume-img" src="../../images/manager.png"
+                                         alt="manager-image">
+                                    <div class="candidate-item__resume-info">
+                                        <div class="resume-info-item">
+                                            <p class="candidate-name">{{ resume.first_name }} {{ resume.last_name }}</p>
+
+                                        </div>
+                                        <p class="resume-info-position__title"><b>
+                                            {% for position in resume.desired_positions.all %}
+                                            {{ position.name }}{% if not forloop.last %}, {% endif %}
+                                            {% endfor %}
+                                            </b>
+                                            {% if resume.salary_min and resume.salary_max %}
+                                                {{ resume.salary_min|intspace }} - {{ resume.salary_max|intspace }} ₴
+                                            {% elif resume.salary_min %}
+                                                {{ resume.salary_min|intspace }} ₴
+                                            {% elif resume.salary_max %}
+                                                {{ resume.salary_max|intspace }} ₴
+                                            {% endif %}
+                                            </p>
+                                        <ul class="resume-info-item">
+                                            <li class="resume-info-text">Вік: <span class="resume-info-text-medium">27 років</span>
+                                            </li>
+                                            <li class="resume-info-text">Місто: <span class="resume-info-text-medium">{{ resume.city }}</span>
+                                            </li>
+                                            <li class="resume-info-text">Зайнятість: <span
+                                                    class="resume-info-text-medium">Повна</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="block-contact">
+                                <h5 class="title-md">Контактна інформація</h5>
+                                <div class="contact-item">
+                                    <img class="contact-img" src="{% static 'main/images/phone.svg' %}" alt="phone">
+                                    <span class="contact-text">
+                                        <a href="tel:+380XXXXXXXXX">{{ resume.phone }}</a>
+                                    </span>
+                                </div>
+
+                            </div>
+                            <div class="work-experience-block">
+                                <div class="work-experience-top">
+                                    <h5 class="title-md">Досвід роботи</h5>
+                                    <span class="work-experience-value">3 роки</span>
+                                </div>
+
+                                <ul class="work-experience__block-list">
+                                    <li class="work-experience-item">
+                                        <img src="../../images/samsung.svg" alt="img-icon" class="work-experience-img">
+                                        <div class="work-experience-info">
+                                            <p class="subtitle-text">Менеджер з продажу</p>
+                                            <ul class="work-experience-list">
+                                                <li class="work-experience__list-item">
+                                                    Samsung
+                                                </li>
+                                                <li class="work-experience__list-item">
+                                                    Повна зайнятість
+                                                </li>
+                                                <li class="work-experience__list-item">
+                                                    <span class="work-experience-text">2 роки 3 місяці </span>
+                                                    (жов.2022 - тепершній час)
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li class="work-experience-item">
+                                        <img src="../../images/apple.svg" alt="img-icon" class="work-experience-img">
+                                        <div class="work-experience-info">
+                                            <p class="subtitle-text">Менеджер з продажу</p>
+                                            <ul class="work-experience-list">
+                                                <li class="work-experience__list-item">
+                                                    Apple
+                                                </li>
+                                                <li class="work-experience__list-item">
+                                                    Повна зайнятість
+                                                </li>
+                                                <li class="work-experience__list-item">
+                                                    <span class="work-experience-text">9 місяців </span>
+                                                    (січ.2022 - жов.2022)
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="education-block">
+                                <h5 class="title-md">Освіта</h5>
+                                <div class="education__info-block">
+                                    <p class="subtitle-text">ДНУ <span class="text-sm-medium">(Дніпровський національний університет)</span>
+                                    </p>
+                                    <p class="text-sm-medium">Менеджер</p>
+                                    <ul class="work-experience-list">
+                                        <li class="work-experience__list-item ">
+                                            Незакінчена вища
+                                        </li>
+                                        <li class="work-experience__list-item">
+                                            <span class="work-experience-text">2 роки 3 місяці </span>
+                                            (жов.2022 - тепершній час)
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="additional-education-block">
+                                <h5 class="title-md">Додаткові курси</h5>
+                                <div class="additional-education__info-block">
+                                    <p class="subtitle-text">Назва курсу/семінару тощо</p>
+                                    <p class="text-sm-medium">Назва закладу</p>
+                                    <p class="additional-education__info-item">Отриман 23 жов. 2023</p>
+                                </div>
+                            </div>
+
+                            <div class="knowledge-habits-block">
+                                <h5 class="title-md">Знання і навички</h5>
+                                <ul class="knowledge-habits__list">
+                                    <li class="knowledge-habits__item type-blue">Екстремальні продажі</li>
+                                    <li class="knowledge-habits__item type-blue">Маркетинг</li>
+                                    <li class="knowledge-habits__item type-blue">Менеджмент</li>
+                                    <li class="knowledge-habits__item type-blue">Назва навички</li>
+                                </ul>
+                            </div>
+
+                            <div class="knowledge-languages-block">
+                                <h5 class="title-md">Знання мов</h5>
+                                <ul class="knowledge-languages__list">
+                                    <li class="knowledge-languages__item">Українська <span
+                                            class="text-sm-light">- рідна</span></li>
+                                    <li class="knowledge-languages__item">Англійська <span class="text-sm-light">- середній</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="resume-file-block">
+                                <h5 class="title-md">Резюме-файл</h5>
+                                <div class="resume-file__img-block">
+                                    <img class="resume-file__img" src="../../images/pdf-2.svg" alt="file">
+                                    <a href="#" class="text-sm-medium">Назва файлу</a>
+                                </div>
+                                <a href="#" class="resume-file__btn btn-transparent">Увійти, щоб завантажити</a>
+                            </div>
+
+                            <div class="candidate-item__bottom-block">
+                                <p class="candidate-item__bottom-text">Опубліковано 6 березня 2024</p>
+                                <div class="candidate-item__bottom-btn-wrapper">
+                                    <button class="candidate-item__btn btn-color">Запропонувати вакансію</button>
+                                    <label class="heart-icon__label text-medium-16">
+                                        <input class="heart-icon__input" type="checkbox">
+                                        <i></i>
+                                        <span>Зберегти</span>
+                                    </label>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </section>
+
+
+                </div>
+
+                <aside class="candidate-item__sidebar">
+                    <div class="candidate-item__sidebar-similar-resume">
+                        <h3 class="vacancy__sidebar-title">
+                            Схожі резюме
+                        </h3>
+                        <ul class="candidate__sidebar-list">
+                            <li class="candidate__sidebar-item">
+                                <div class="candidate-item__card-mini">
+                                    <h5 class="mini-title-2">Менеджер з продажу</h5>
+                                    <div class="card-mini__company-info-wrapper">
+                                        <div class="vacancy__company-info">
+                                            <div class="vacancies__card-mini__company-logo">
+                                                <img class="vacancies__card-company-img"
+                                                     src="../../images/manager-2.png" alt="manager-img">
+                                            </div>
+                                            <div class="vacancy__company-info-text">
+                                                <p class="text-btn-16">Максим, 25 років</p>
+                                                <div class="location-block">
+                                                    <img class="location-img"
+                                                         src="../../images/marker-pin-01.svg"
+                                                         alt="location">
+                                                    <p class="location-text">Дніпро</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="requirements-wrapper">
+                                        <p class="text-sm-medium">Повна зайнятість</p>
+                                        <p>●</p>
+                                        <p class="text-sm-medium">Без досвіду</p>
+                                    </div>
+
+                                    <div class="candidate-item__bottom-buttons">
+                                        <a href="#" class="candidate-item__card-mini__btn btn-color">Запропонувати</a>
+                                        <a href="#"
+                                           class="candidate-item__card-mini__btn btn-transparent">Детальніше</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="candidate__sidebar-item">
+                                <div class="candidate-item__card-mini">
+                                    <h5 class="mini-title-2">Менеджер з продажу</h5>
+                                    <div class="card-mini__company-info-wrapper">
+                                        <div class="vacancy__company-info">
+                                            <div class="vacancies__card-mini__company-logo">
+                                                <img class="vacancies__card-company-img"
+                                                     src="../../images/manager-2.png" alt="manager-img">
+                                            </div>
+                                            <div class="vacancy__company-info-text">
+                                                <p class="text-btn-16">Максим, 25 років</p>
+                                                <div class="location-block">
+                                                    <img class="location-img"
+                                                         src="../../images/marker-pin-01.svg"
+                                                         alt="location">
+                                                    <p class="location-text">Дніпро</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="requirements-wrapper">
+                                        <p class="text-sm-medium">Повна зайнятість</p>
+                                        <p>●</p>
+                                        <p class="text-sm-medium">Без досвіду</p>
+                                    </div>
+
+                                    <div class="candidate-item__bottom-buttons">
+                                        <a href="#" class="candidate-item__card-mini__btn btn-color">Запропонувати</a>
+                                        <a href="#"
+                                           class="candidate-item__card-mini__btn btn-transparent">Детальніше</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="candidate__sidebar-item">
+                                <div class="candidate-item__card-mini">
+                                    <h5 class="mini-title-2">Менеджер з продажу</h5>
+                                    <div class="card-mini__company-info-wrapper">
+                                        <div class="vacancy__company-info">
+                                            <div class="vacancies__card-mini__company-logo">
+                                                <img class="vacancies__card-company-img"
+                                                     src="../../images/manager-2.png" alt="manager-img">
+                                            </div>
+                                            <div class="vacancy__company-info-text">
+                                                <p class="text-btn-16">Максим, 25 років</p>
+                                                <div class="location-block">
+                                                    <img class="location-img"
+                                                         src="../../images/marker-pin-01.svg"
+                                                         alt="location">
+                                                    <p class="location-text">Дніпро</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="requirements-wrapper">
+                                        <p class="text-sm-medium">Повна зайнятість</p>
+                                        <p>●</p>
+                                        <p class="text-sm-medium">Без досвіду</p>
+                                    </div>
+
+                                    <div class="candidate-item__bottom-buttons">
+                                        <a href="#" class="candidate-item__card-mini__btn btn-color">Запропонувати</a>
+                                        <a href="#"
+                                           class="candidate-item__card-mini__btn btn-transparent">Детальніше</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="candidate__sidebar-item">
+                                <div class="candidate-item__card-mini">
+                                    <h5 class="mini-title-2">Менеджер з продажу</h5>
+                                    <div class="card-mini__company-info-wrapper">
+                                        <div class="vacancy__company-info">
+                                            <div class="vacancies__card-mini__company-logo">
+                                                <img class="vacancies__card-company-img"
+                                                     src="../../images/manager-2.png" alt="manager-img">
+                                            </div>
+                                            <div class="vacancy__company-info-text">
+                                                <p class="text-btn-16">Максим, 25 років</p>
+                                                <div class="location-block">
+                                                    <img class="location-img"
+                                                         src="../../images/marker-pin-01.svg"
+                                                         alt="location">
+                                                    <p class="location-text">Дніпро</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="requirements-wrapper">
+                                        <p class="text-sm-medium">Повна зайнятість</p>
+                                        <p>●</p>
+                                        <p class="text-sm-medium">Без досвіду</p>
+                                    </div>
+
+                                    <div class="candidate-item__bottom-buttons">
+                                        <a href="#" class="candidate-item__card-mini__btn btn-color">Запропонувати</a>
+                                        <a href="#"
+                                           class="candidate-item__card-mini__btn btn-transparent">Детальніше</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="candidate__sidebar-item">
+                                <div class="candidate-item__card-mini">
+                                    <h5 class="mini-title-2">Менеджер з продажу</h5>
+                                    <div class="card-mini__company-info-wrapper">
+                                        <div class="vacancy__company-info">
+                                            <div class="vacancies__card-mini__company-logo">
+                                                <img class="vacancies__card-company-img"
+                                                     src="../../images/manager-2.png" alt="manager-img">
+                                            </div>
+                                            <div class="vacancy__company-info-text">
+                                                <p class="text-btn-16">Максим, 25 років</p>
+                                                <div class="location-block">
+                                                    <img class="location-img"
+                                                         src="../../images/marker-pin-01.svg"
+                                                         alt="location">
+                                                    <p class="location-text">Дніпро</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="requirements-wrapper">
+                                        <p class="text-sm-medium">Повна зайнятість</p>
+                                        <p>●</p>
+                                        <p class="text-sm-medium">Без досвіду</p>
+                                    </div>
+
+                                    <div class="candidate-item__bottom-buttons">
+                                        <a href="#" class="candidate-item__card-mini__btn btn-color">Запропонувати</a>
+                                        <a href="#"
+                                           class="candidate-item__card-mini__btn btn-transparent">Детальніше</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="candidate__sidebar-item">
+                                <div class="candidate-item__card-mini">
+                                    <h5 class="mini-title-2">Менеджер з продажу</h5>
+                                    <div class="card-mini__company-info-wrapper">
+                                        <div class="vacancy__company-info">
+                                            <div class="vacancies__card-mini__company-logo">
+                                                <img class="vacancies__card-company-img"
+                                                     src="../../images/manager-2.png" alt="manager-img">
+                                            </div>
+                                            <div class="vacancy__company-info-text">
+                                                <p class="text-btn-16">Максим, 25 років</p>
+                                                <div class="location-block">
+                                                    <img class="location-img"
+                                                         src="../../images/marker-pin-01.svg"
+                                                         alt="location">
+                                                    <p class="location-text">Дніпро</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="requirements-wrapper">
+                                        <p class="text-sm-medium">Повна зайнятість</p>
+                                        <p>●</p>
+                                        <p class="text-sm-medium">Без досвіду</p>
+                                    </div>
+
+                                    <div class="candidate-item__bottom-buttons">
+                                        <a href="#" class="candidate-item__card-mini__btn btn-color">Запропонувати</a>
+                                        <a href="#"
+                                           class="candidate-item__card-mini__btn btn-transparent">Детальніше</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="candidate-item__sidebar-btn-wrapper">
+                            <a href="#" class="candidate-item__sidebar-btn btn-transparent">Завантажити ще</a>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}
+<script src="../../index.js"></script>

@@ -1,0 +1,43 @@
+
+.vacancies__search-location-wrapper {
+    margin-top: 40px;
+}
+
+.vacancies {
+    display: flex;
+    gap: 28px;
+    justify-content: space-between;
+    height: 100%;
+}
+.vacancies__input{
+    border: 1px solid var(--green);
+}
+.vacancies__left {
+    flex-basis: 732px;
+}
+
+.vacancies__filter-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 40px 0 32px;
+}
+
+.vacancies__filter-block-text {
+    font-size: 18px;
+    font-weight: 600;
+    font-family: "Montserrat", sans-serif;
+}
+
+.vacancies__right {
+    flex-basis: 350px;
+    margin-top: 112px;
+}
+.vacancies__right-content{
+    position: sticky;
+    top: 0;
+}
+
+.vacancies__cards-wrapper {
+    margin-bottom: 89px;
+}

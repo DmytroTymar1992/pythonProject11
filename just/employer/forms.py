@@ -1,7 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
-from main.models import User
+from django.core.files.base import ContentFile
+import base64
+from main.models import User, City
 from main.validators import EmployerPasswordValidator
 from django.contrib.auth import get_user_model
 from searcher.forms import SelectDateWidget
@@ -12,6 +14,12 @@ class EmailVerificationForm(forms.Form):
         required=True,
         widget=forms.EmailInput(attrs={'class': 'form__input', 'placeholder': 'Email'})
     )
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise ValidationError('Цей email вже зареєстрований.')
+        return email
 
 class EmailConfirmationCodeForm(forms.Form):
     code = forms.CharField(
@@ -36,10 +44,10 @@ class EmployerRegistrationForm(UserCreationForm):
         required=False,
         widget=forms.TextInput(attrs={'class': 'form__input', 'placeholder': 'По батькові'})
     )
-    city = forms.CharField(
+    city_name = forms.CharField(
         max_length=100,
         required=False,
-        widget=forms.TextInput(attrs={'class': 'form__input', 'placeholder': 'Місто'})
+        widget=forms.TextInput(attrs={'class': 'js_open form__input', 'placeholder': 'Місто'})
     )
     password1 = forms.CharField(
         widget=forms.PasswordInput(
@@ -56,7 +64,7 @@ class EmployerRegistrationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'middle_name', 'city', 'password1', 'password2')
+        fields = ('first_name', 'last_name', 'middle_name', 'city_name', 'password1', 'password2')
 
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
@@ -90,23 +98,32 @@ class EmployerRegistrationForm(UserCreationForm):
 
 User = get_user_model()
 class UserProfileForm(forms.ModelForm):
+    city_name = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={'class': 'js_open form__input input-size-lg', 'placeholder': 'Місто'})
+    )
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'city', 'birthday', 'phone', 'email', 'avatar']
+        fields = ['first_name', 'last_name', 'city_name', 'birthday', 'phone', 'email', 'avatar']
         widgets = {
             'birthday': SelectDateWidget(),
             'first_name': forms.TextInput(attrs={'class': 'form__input input-size-lg'}),
             'last_name': forms.TextInput(attrs={'class': 'form__input input-size-lg'}),
-            'city': forms.TextInput(attrs={'class': 'form__input input-size-lg'}),
+
             'phone': forms.TextInput(attrs={'class': 'form__input input-size-lg'}),
             'email': forms.EmailInput(attrs={'class': 'form__input input-size-lg'}),
             'avatar': forms.ClearableFileInput(attrs={'class': 'form__input input-size-lg'}),
         }
 
+
     def save(self, commit=True):
         user = super().save(commit=False)
-        if 'password' not in self.changed_data:
-            user.password = User.objects.get(pk=user.pk).password
+        cropped_avatar = self.data.get('cropped_avatar')
+        if cropped_avatar:
+            format, imgstr = cropped_avatar.split(';base64,')
+            ext = format.split('/')[-1]
+            data = ContentFile(base64.b64decode(imgstr), name=f'avatar.{ext}')
+            user.avatar = data
         if commit:
             user.save()
         return user

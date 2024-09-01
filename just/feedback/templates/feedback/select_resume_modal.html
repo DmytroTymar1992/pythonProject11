@@ -1,0 +1,67 @@
+{% load static %}
+{% load filters %}
+<div id="resumeModal" class="modal">
+    <div class="modal-content-resume-orm">
+        <span class="close">&times;</span>
+        <h3>Виберіть резюме</h3>
+        <form id="resumeForm">
+            {% csrf_token %}
+            <div id="resume-options">
+                {% for resume in request.user.resumes.all %}
+                <li class="candidate__cards-item">
+                    <div class="candidate__card">
+                        <div class="candidate__card-top">
+                            <div class="candidate__card-title-block">
+                                <div class="candidate__card-title-left">
+                                    {% if resume.avatar %}
+                                        <img class="candidate__card-company-img" src="{{ resume.avatar.url }}" alt="avatar">
+                                    {% else %}
+                                        <img class="candidate__card-company-img" src="{% static 'main/images/default-avatar.svg' %}" alt="avatar">
+                                    {% endif %}
+                                </div>
+                                <div class="personal__card-title-right">
+                                    <h3 class="title-article">{{ resume.positions }}</h3>
+                                    <div class="personal__card-subtitle">
+                                        <p class="candidate__card-name">{{ resume.first_name }} {{ resume.last_name }}, <span
+                                                class="candidate__card-age">{{ resume.get_age }} роки</span></p>
+                                        <div class="location-block">
+                                            <img class="location-img" src="{% static 'main/images/marker-pin-01.svg' %}"
+                                                 alt="location">
+                                            <p class="location-text">{{ resume.city }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="vacancies__card-additional-info">
+                                <div class="text-btn">
+                                    {% if resume.salary_min and resume.salary_max %}
+                                        {{ resume.salary_min|intspace }} - {{ resume.salary_max|intspace }} ₴
+                                    {% elif resume.salary_min %}
+                                        Від {{ resume.salary_min|intspace }} ₴
+                                    {% elif resume.salary_max %}
+                                        До {{ resume.salary_max|intspace }} ₴
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="personal__card-bottom-wrapper">
+                            <div class="vacancies__card-bottom">
+                                <div class="personal__card-bottom-buttons">
+                                    <input type="radio" id="resume_{{ resume.id }}" name="resume_id" value="{{ resume.id }}" class="personal__card-bottom-btn btn-color">
+                                    <label for="resume_{{ resume.id }}">Вибрати</label>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </div>
+
+            <div class="form__submit-btn-wrapper">
+                <button type="submit" class="form__submit-btn btn-color">Відправити</button>
+            </div>
+        </form>
+    </div>
+</div>

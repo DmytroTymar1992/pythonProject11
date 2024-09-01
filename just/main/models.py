@@ -22,6 +22,9 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
+        if 'city' not in extra_fields or extra_fields['city'] is None:
+            extra_fields['city_id'] = 1
+
         return self.create_user(email=email, password=password, **extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -37,7 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=30, null=True, blank=True)
     middle_name = models.CharField(max_length=30, null=True, blank=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
-    city = models.CharField(max_length=100, null=True, blank=True)
+    city = models.ForeignKey('main.City', on_delete=models.CASCADE, verbose_name="Місто")
     birthday = models.DateField(null=True, blank=True)
     date_created = models.DateTimeField(default=timezone.now)
     company = models.ForeignKey(Company, null=True, blank=True, on_delete=models.SET_NULL, related_name='users')
@@ -82,3 +85,31 @@ class User(AbstractBaseUser, PermissionsMixin):
                     raise ValidationError('Company must be provided for employers.')
                 if not self.password or len(self.password) < 8 or self.password.isdigit():
                     raise ValidationError('Password must be at least 8 characters and not entirely numeric for employers.')
+
+
+class Region(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Region"
+        verbose_name_plural = "Regions"
+        ordering = ['name']
+
+
+class City(models.Model):
+    name = models.CharField(max_length=255)
+    name_ru = models.CharField(max_length=255, verbose_name="Название на русском")
+    region = models.ForeignKey(Region, on_delete=models.CASCADE, related_name='cities')
+    latitude = models.DecimalField(max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "City"
+        verbose_name_plural = "Cities"
+        ordering = ['name']

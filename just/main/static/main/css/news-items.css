@@ -1,0 +1,142 @@
+.news-item__breadcrumb-wrapper {
+    margin-top: 32px;
+}
+
+.news-item__article-wrapper {
+    display: flex;
+    gap: 26px;
+    justify-content: space-between;
+}
+
+.news-item__article-left {
+    flex-basis: 732px;
+}
+
+.news-item__article-right {
+    flex-basis: 352px;
+    position: sticky;
+    top: 0;
+}
+
+.news-item__wrapper-img {
+    width: 100%;
+    background-color: #EEEEEE;
+    height: 303px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.news-item__img {
+    width: 46px;
+    height: 40px;
+
+}
+
+.news-item__description {
+    display: flex;
+    gap: 25px;
+    margin-top: 24px;
+}
+
+.news-item__description li {
+    list-style-type: none;
+}
+
+.news-item__quote-subtitle {
+    font-weight: 600;
+    margin: 24px 0 8px;
+}
+
+.news-item__quote-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.news-item__quote-list li {
+    margin-left: 15px;
+}
+
+.news-item__quote-text {
+    font-size: 14px;
+    color: var(--dark-grey);
+    line-height: 150%;
+}
+
+.news-item__title-top {
+    margin-top: 24px;
+}
+
+.news-item__title-comment {
+    margin-top: 64px;
+}
+
+.news-item__comment-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 24px;
+}
+
+.news-item__comment-bottom {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.news-item__comment-bottom p {
+    font-size: 14px;
+    line-height: 140%;
+}
+
+.news-item__comment-text {
+    margin-top: 8px;
+}
+
+.news-item__wrapper-comments div:nth-child(2) {
+    margin-left: 60px;
+}
+
+.news-item__form {
+    border-radius: 8px;
+    margin: 40px 0 160px;
+    width: 100%;
+}
+
+.news-item__form-textarea {
+    width: 100%;
+    height: 205px;
+    border: none;
+    border-radius: 16px;
+    padding: 24px;
+    margin-top: 24px;
+    resize: none;
+    overflow: hidden;
+    background-color: var(--bg-white);
+}
+
+.news-item__form-label {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 24px;
+}
+
+.news-item__form-textarea::placeholder {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 150%;
+    color: var(--dark-grey);
+}
+
+.news-item__form-btn {
+    width: 300px;
+    height: 50px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 24px;
+}

@@ -1,0 +1,173 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block extra_styles %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <link rel="stylesheet" href="{% static 'main/css/personal.css' %}"/>
+{% endblock %}
+{% block content %}
+    <main>
+        <div class="container">
+            <div class="personal__inner">
+                <div class="title-wrapper-start">
+                    <h1 class="title-xl">Мій акаунт</h1>
+                </div>
+
+                <div class="personal__content-wrapper">
+                    <aside class="personal__content-left">
+                        <div class="personal__content-left-wrapper">
+                            <p class="aside-subtitle subtitle">Налаштування профілю</p>
+                            <nav>
+                                <ul class="aside-nav__list">
+                                    <li class="aside-nav__list-item text-medium-18">
+                                        <a href="{% url 'profile_vacancy_list' %}">Вакансії</a>
+                                        <p class="vacancy-info__item-value">3</p>
+                                    </li>
+                                    <li class="aside-nav__list-item text-medium-18 aside-nav__active">
+                                        <a href="{% url 'employer_feedback_list' %}">Відгуки</a>
+                                        <p class="vacancy-info__item-value">{{ status_counts.all|default:"0" }}</p>
+                                    </li>
+                                </ul>
+                                <div class="aside-nav__line"></div>
+                                <ul class="aside-nav__list">
+                                    <li class="aside-nav__list-item text-medium-18">
+                                        <a href="#">Потенційни Кандидати</a>
+                                        <p class="vacancy-info__item-value">430</p>
+                                    </li>
+                                    <li class="aside-nav__list-item text-medium-18">
+                                        <a href="#">Збережені Кандидати</a>
+                                        <p class="vacancy-info__item-value">12</p>
+                                    </li>
+                                </ul>
+                                <div class="aside-nav__line"></div>
+                                <ul class="aside-nav__list">
+                                    <li class="aside-nav__list-item text-medium-18">
+                                        <a href="#">Аналітика</a>
+                                    </li>
+                                    <li class="aside-nav__list-item text-medium-18">
+                                        <a href="#">Оплата</a>
+                                    </li>
+                                    <li class="aside-nav__list-item text-medium-18">
+                                        <a href="#">Реквізити</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                            <div class="personal__logout__link-wrapper">
+                                <a href="{% url 'logout' %}" class="logout__link text-medium-18">
+                                    <img
+                                            src="{% static 'main/images/log-in.svg' %}"
+                                            alt="search"
+                                            class="search__img"
+                                    />Вийти</a
+                                >
+                            </div>
+                        </div>
+                    </aside>
+
+                    <section class="personal__content-right">
+                        <div id = "filter-block">
+                            <form id="status-filter-form">
+                                {% csrf_token %}
+                                <div class="personal__filter-block">
+                                        <label for="vacancy-select">Виберіть вакансію:</label>
+                                        <select id="vacancy-select" name="vacancy">
+                                            <option value="all">Всі вакансії</option>
+                                            {% for vacancy in vacancies %}
+                                                    <option value="{{ vacancy.id }}">{{ vacancy.position }}
+                                                        <span style="font-size: 0.8em;">{{ vacancy.city }}</span>
+                                                    </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                <div class="personal__filter-block">
+                                    <div class="personal__tab">
+                                        <input type="radio" id="radio1" name="status" value="all" checked>
+                                        <label class="personal3__input-tab" for="radio1">
+                                            Всі <span>({{ status_counts.all|default:"0" }})</span>
+                                        </label>
+                                        <input type="radio" id="radio2" name="status" value="new">
+                                        <label class="personal3__input-tab" for="radio2">
+                                            Нові {% if status_counts.new > 0 %}<span>({{ status_counts.new }})</span>{% endif %}
+                                        </label>
+                                        <input type="radio" id="radio3" name="status" value="in_progress">
+                                        <label class="personal3__input-tab" for="radio3">
+                                            В роботі <span>({{ status_counts.in_progress|default:"0" }})</span>
+                                        </label>
+                                        <input type="radio" id="radio4" name="status" value="rejected">
+                                        <label class="personal3__input-tab" for="radio4">
+                                            Відхилено <span>({{ status_counts.rejected|default:"0" }})</span>
+                                        </label>
+                                        <input type="radio" id="radio5" name="status" value="interview">
+                                        <label class="personal3__input-tab" for="radio5">
+                                            Співбесіда <span>({{ status_counts.interview|default:"0" }})</span>
+                                        </label>
+                                        <input type="radio" id="radio6" name="status" value="reserve">
+                                        <label class="personal3__input-tab" for="radio6">
+                                            В резерві <span>({{ status_counts.reserve|default:"0" }})</span>
+                                        </label>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+                        {% if feedbacks.exists %}
+                            <ul class="candidate__cards" id="feedback-list">
+                            {% include 'feedback/feedback_list.html' %}
+                            </ul>
+                        {% else %}
+                            <p>Відгуків на вакансії вашої компанії поки немає.</p>
+                        {% endif %}
+
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+{% block extra_js %}
+<script src="../../index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+    function filterFeedbacks() {
+        var selectedStatus = $('input[name="status"]:checked').val();
+        var selectedVacancy = $('#vacancy-select').val();
+
+        $.ajax({
+            url: "{% url 'employer_feedback_list' %}",
+            type: 'GET',
+            data: {
+                'status': selectedStatus,
+                'vacancy': selectedVacancy
+            },
+            success: function(response) {
+                $('#feedback-list').html(response.html);
+                $('label[for="radio1"] span').text('(' + (response.status_counts['all'] || 0) + ')');
+                $('label[for="radio2"] span').text('(' + (response.status_counts['new'] || 0) + ')');
+                $('label[for="radio3"] span').text('(' + (response.status_counts['in_progress'] || 0) + ')');
+                $('label[for="radio4"] span').text('(' + (response.status_counts['rejected'] || 0) + ')');
+                $('label[for="radio5"] span').text('(' + (response.status_counts['interview'] || 0) + ')');
+                $('label[for="radio6"] span').text('(' + (response.status_counts['reserve'] || 0) + ')');
+            },
+            error: function() {
+                alert("Сталася помилка під час завантаження відгуків.");
+            }
+        });
+    }
+
+    $('input[name="status"]').change(function() {
+        filterFeedbacks();
+    });
+
+    $('#vacancy-select').change(function() {
+        filterFeedbacks();
+    });
+});
+
+</script>
+{% endblock %}
+

@@ -2,6 +2,8 @@ from django.db import models
 from django.conf import settings  # Це використовується для посилання на модель User
 from django.utils.text import slugify
 from django.utils import timezone
+from main.choices import EDUCATION_LEVEL_CHOICES
+from ckeditor.fields import RichTextField
 
 
 class Company(models.Model):
@@ -121,21 +123,72 @@ class Vacancy(models.Model):
         ('hidden', 'Прихована'),
     ]
 
+    EXPERIENCE_CHOICES = [
+        ('no_experience', 'Можна без досвіду'),
+        ('preferred_experience', 'Досвід буде перевагою'),
+        ('one_year', 'Досвід від 1-го року'),
+        ('two_years', 'Досвід від 2-х років'),
+        ('more_than_five_years', 'Досвід більше 5 років'),
+    ]
+
+    SCHEDULE_CHOICES = [
+        ('standard_5_2', 'Стандартний графік 5/2'),
+        ('shift_4_4', 'Позмінний графік 4/4'),
+        ('shift_2_2_4', 'Позмінний графік 2/2/4'),
+        ('shift_4_2', 'Позмінний графік 4/2'),
+        ('duty_1_3', 'Чергування доба/3 вихідних'),
+        ('floating', 'Плаваючий графік'),
+        ('free', 'Вільний графік'),
+        ('part_time', 'Підробіток (не повний день)'),
+    ]
+
     position = models.ForeignKey(JobPosition, on_delete=models.CASCADE, related_name='vacancies', verbose_name="Посада")
     position_comment = models.CharField(max_length=30, verbose_name="Коментар до посади", blank=True, null=True)
-    city = models.CharField(max_length=100, verbose_name="Місто")
+    city = models.ForeignKey('main.City', on_delete=models.CASCADE, verbose_name="Місто")
     address = models.CharField(max_length=255, verbose_name="Адреса", blank=True, null=True)
     phone_number = models.CharField(max_length=15, verbose_name="Номер телефону", blank=True, null=True)
-    min_salary = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Зарплата мін", blank=True, null=True)
-    max_salary = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Зарплата макс", blank=True, null=True)
+    min_salary = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="Зарплата мін", blank=True, null=True)
+    max_salary = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="Зарплата макс", blank=True, null=True)
     hashtags = models.ManyToManyField(Hashtag, verbose_name="Хештеги", blank=True)
-    employment_type = models.CharField(max_length=10, choices=EMPLOYMENT_TYPE_CHOICES, verbose_name="Тип зайнятості", blank=True, null=True)
-    work_type = models.CharField(max_length=15, choices=WORK_TYPE_CHOICES, verbose_name="Харакатер роботи", blank=True, null=True)
+    employment_type = models.CharField(max_length=10, choices=EMPLOYMENT_TYPE_CHOICES, verbose_name="Тип зайнятості",
+                                       blank=True, null=True)
+    education_level = models.CharField(max_length=20, choices=EDUCATION_LEVEL_CHOICES)
     description = models.TextField(verbose_name="Опис")
     social_networks = models.BooleanField(default=False, verbose_name="Соц.Мережі")
     company = models.ForeignKey(Company, on_delete=models.CASCADE, verbose_name="Компанія")
     publication_date = models.DateTimeField(default=timezone.now, verbose_name="Дата та час публікації")
     status = models.CharField(max_length=15, choices=STATUS_CHOICES, verbose_name="Статус")
+    view_count = models.PositiveIntegerField(default=0, verbose_name="Кількість переглядів")
+    experience = models.CharField(max_length=20, choices=EXPERIENCE_CHOICES, verbose_name="Досвід роботи",
+                                  default='no_experience')
+    schedule = models.CharField(max_length=20, choices=SCHEDULE_CHOICES, verbose_name="Графік роботи",
+                                default='standard_5_2')
 
     def __str__(self):
         return f"{self.position} at {self.company}"
+
+
+class VacancyLanguage(models.Model):
+    BEGINNER = 'beginner'
+    BASIC = 'basic'
+    INTERMEDIATE = 'intermediate'
+    ADVANCED = 'advanced'
+    NATIVE = 'native'
+    PROFICIENCY_LEVEL_CHOICES = [
+        (BEGINNER, 'Початківець'),
+        (BASIC, 'Базовий рівень'),
+        (INTERMEDIATE, 'Впевнений користувач'),
+        (ADVANCED, 'Вільно'),
+        (NATIVE, 'Рідна'),
+    ]
+
+    language = models.ForeignKey('resume.Language', on_delete=models.CASCADE, related_name='vacancy_languages')
+    proficiency_level = models.CharField(max_length=20, choices=PROFICIENCY_LEVEL_CHOICES)
+    vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE, related_name='vacancy_languages')
+
+    def __str__(self):
+        return f'{self.language.name or ""} - {self.get_proficiency_level_display() or ""}'.strip()
+
+    class Meta:
+        verbose_name = 'Vacancy Language'
+        verbose_name_plural = 'Vacancy Languages'

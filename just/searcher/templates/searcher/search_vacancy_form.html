@@ -1,0 +1,47 @@
+
+{% load static %}
+<head>
+
+    <link rel="stylesheet" href="{% static 'main/css/vacancies-page.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/create-vacancy.css' %}"/>
+    <link rel="stylesheet" href="{% static 'main/css/personal.css' %}"/>
+
+</head>
+
+<div class="search-location">
+    <form action="{% url 'vacancy_list' %}" class="search-location__form">
+        <div class="search-location__form-input">
+            <img
+                    src="{% static 'main//images/search-md.svg' %}"
+                    alt="search"
+                    class="search-location__form-img"
+            />
+            <label for="id_position" class="label-hidden">Пошук вакансії</label>
+            {{ form.title }}
+            <div class="select__vector"></div>
+            <div><img src="{% static 'main/images/marker-pin-01.svg' %}" alt="cities" class="select__img"></div>
+            <div class="search-location__select-wrapper">
+
+                <label for="place" class="label-hidden">Місто</label>
+                {{ form.city }}
+            </div>
+        </div>
+        <button type="submit" class="search-location__btn btn-color text-btn">
+            Знайти роботу
+        </button>
+    </form>
+</div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+    <script>
+        const positionAutocompleteUrl = "{% url 'position-autocomplete' %}";
+        const getCategoriesUrl = "{% url 'get_categories' %}";
+        const cityAutocompleteUrl = "{% url 'city-autocomplete' %}";
+    </script>
+    <script src="{% static 'main/js/autocomplete-position.js' %}"></script>
+    <script src="{% static 'main/js/autocomplete-city.js' %}"></script>
+    <script src="{% static 'main/js/autocomplete-eror.js' %}"></script>
+

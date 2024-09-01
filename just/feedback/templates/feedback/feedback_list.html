@@ -1,0 +1,162 @@
+{% load static %}
+{% for feedback in feedbacks %}
+{% load filters %}
+<li class="candidate__cards-item">
+    <div class="candidate__card">
+        <div class="candidate__card-top">
+            <div class="candidate__card-title-block">
+                <div class="candidate__card-title-left">
+                    {% if feedback.job_seeker.avatar %}
+                        <img class="candidate__card-company-img" src="{{ feedback.job_seeker.avatar.url }}" alt="avatar">
+                    {% else %}
+                        <img class="candidate__card-company-img" src="{% static 'main/images/default-avatar.svg' %}" alt="avatar">
+                    {% endif %}
+                </div>
+                <div class="personal__card-title-right">
+                    {% if feedback.resume %}
+                    <h3 class="title-article">{{ feedback.resume.positions }}</h3>
+                    {% else %}
+                    <h3 class="title-article"></h3>
+                    {% endif %}
+                    <div class="personal__card-subtitle">
+                        <p class="candidate__card-name">{{ feedback.job_seeker.first_name }} {{ feedback.job_seeker.last_name }} {{ feedback.lead.name }}, <span
+                                class="candidate__card-age">{{ age }} роки</span></p>
+                        {% if feedback.job_seeker.city %}
+                        <div class="location-block">
+                            <img class="location-img" src="{% static 'main/images/marker-pin-01.svg' %}"
+                                 alt="location">
+                            <p class="location-text">{{ feedback.job_seeker.city }}</p>
+                        </div>
+                        {% else %}
+                        <div class="location-block"></div>
+                        {% endif %}
+                    </div>
+                    {% if not feedback.resume %}
+                    <p class="candidate__card-name">  {{ feedback.lead.phone }} {{ feedback.job_seeker.phone }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% if not feedback.resume %}
+                <div class="vacancies__card-top-salary">Відгук без резюме</div>
+                {% else %}
+                {% if feedback.resume.salary_min and feedback.resume.salary_max %}
+                    <div class="vacancies__card-top-salary">{{ feedback.resume.salary_min|intspace }} - {{ feedback.resume.salary_max|intspace }} ₴</div>
+                {% elif feedback.resume.salary_min %}
+                    <div class="vacancies__card-top-salary"> {{ feedback.resume.salary_min|intspace }} ₴</div>
+                {% elif feedback.resume.salary_max %}
+                    <div class="vacancies__card-top-salary"> {{ feedback.resume.salary_max|intspace }} ₴</div>
+                {% endif %}
+            {% endif %}
+        </div>
+        {% if feedback.resume %}
+        <div class="candidate__requirements-block">
+            <ul class="candidate__requirements-list">
+                <li class="candidate__requirements-item type-green">Готовий до переїзду</li>
+                <li class="candidate__requirements-item type-purple">Вища освіта</li>
+                <li class="candidate__requirements-item type-blue">Повна / Неповна зайнятість</li>
+                <li class="candidate__requirements-item type-hot">3 роки досвіду</li>
+            </ul>
+        </div>
+        {% endif %}
+        <div class="personal__card-bottom-wrapper">
+            <div class="vacancies__card-bottom">
+                <div class="personal__card-bottom-buttons">
+                    <select class="status-select personal__card-bottom-btn btn-color " data-feedback-id="{{ feedback.id }}">
+
+                        {% for key, value in feedback.STATUS_CHOICES %}
+                            <option  value="{{ key }}" {% if feedback.status == key %}selected{% endif %}>{{ value }}</option>
+                        {% endfor %}
+                    </select>
+                    <a href="#" class="personal__card-bottom-btn btn-delete-fill">Відхилити</a>
+                    {% if feedback.resume %}
+                    <a href="#"
+                       class="personal__card-bottom-btn btn-transparent">Детальніше</a>
+                    {% endif %}
+                </div>
+
+
+                <label class="heart-icon__label text-medium-16">
+                    <input class="heart-icon__input" type="checkbox">
+                    <i></i>
+                    <span>Зберегти</span>
+                </label>
+            </div>
+        </div>
+    </div>
+</li>
+
+{% endfor %}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function showCToast(type, message) {
+        const colorMap = {
+            "info": '#63B3ED',
+            "success": '#2dce89',
+            "error": '#f5365c',
+            "default": "#20c997"
+        };
+
+        const color = colorMap[type] || colorMap["default"];
+
+        Toastify({
+            text: message,
+            duration: 3000,
+            className: type,
+            close: true,
+            gravity: "top",
+            position: "right",
+            stopOnFocus: true,
+            style: {
+                background: color,
+            },
+            escapeMarkup: false,
+        }).showToast();
+    }
+
+    $(document).ready(function() {
+        $('.status-select').change(function() {
+            var feedbackId = $(this).data('feedback-id');
+            var newStatus = $(this).val();
+            var csrfToken = getCookie('csrftoken');
+
+            $.ajax({
+                url: "{% url 'update_feedback_status' 0 %}".replace('0', feedbackId),
+                type: 'POST',
+                data: {
+                    'csrfmiddlewaretoken': csrfToken,
+                    'status': newStatus
+                },
+                success: function(response) {
+                    if (response.status == 'success') {
+
+                        // Виклик існуючого скрипту для оновлення списку
+                        $('input[name="status"]:checked').trigger('change');
+
+                        showCToast('success', 'Статус оновлено успішно')
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function() {
+                    alert('Сталася помилка при зміні статусу.');
+                }
+            });
+        });
+    });
+</script>
+

@@ -1,0 +1,21 @@
+{% load static %}
+<div id="leadModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Залиште свої дані для роботодавця <br> або увійдіть в акаунт</h3>
+        <form id="leadForm" method="post" action="{% url 'save_lead_feedback' 0 %}">
+            {% csrf_token %}
+            <div class="form__input-wrapper">
+                <label for="name" class="label">Ім'я</label>
+                <input type="text" id="name" name="name" class="form__input" placeholder="Ім'я" required value="{{ request.session.lead_name }}">
+            </div>
+            <div class="form__input-wrapper">
+                <label for="phone" class="label">Номер телефону</label>
+                <input type="tel" id="phone" name="phone" required class="form__input" placeholder="+(38_)" value="{{ request.session.lead_phone }}">
+            </div>
+            <div class="form__submit-btn-wrapper">
+                <button type="submit" class="form__submit-btn btn-color">Відправити</button>
+            </div>
+        </form>
+    </div>
+</div>

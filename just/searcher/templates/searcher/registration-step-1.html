@@ -9,6 +9,7 @@
             href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
             rel="stylesheet"
     />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="stylesheet" href="{% static 'main/css/reset.css' %}"/>
     <link rel="stylesheet" href="{% static 'main/css/style.css' %}"/>
 </head>
@@ -46,15 +47,7 @@
                    <form method="post" action="#" class="form">
                        {% csrf_token %}
                        {{ form.non_field_errors }}
-                       {% if form.errors %}
-                       <div class="form__errors">
-                           <ul>
-                               {% for error in form.errors.values %}
-                                   <li>{{ error }}</li>
-                               {% endfor %}
-                           </ul>
-                       </div>
-                       {% endif %}
+
                        <div class="form__input-wrapper-registration-top-24">
                            {{ form.phone }}
                        </div>
@@ -79,5 +72,53 @@
     </main>
 </div>
 <script src="{% static 'main/index.js' %}"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+// Function to display Toastify notifications
+function showCToast(type, message) {
+/*
+    type: info, success, error, default;
+    message: message to be displayed.
+    */
+    const colorMap = {
+        "info": '#63B3ED',
+        "success": '#2dce89',
+        "error": '#f5365c',
+        "default": "#20c997"
+    };
+
+    const color = colorMap[type] || colorMap["default"];
+
+    // Configure and display the toast notification
+    Toastify({
+        text: message,
+        duration: 3000,
+        className: type,
+        close: true,
+        gravity: "top",       // `top` or `bottom`
+        position: "center",   // `left`, `center` or `right`
+        stopOnFocus: true,    // Prevent dismissing of toast on hover
+        style: {
+            background: color,
+        },
+        escapeMarkup: false,   // Render HTML tags in the notification
+    }).showToast();
+}
+
+// Extract Django messages and display them using Toastify
+const customMessages = [
+    {% for message in messages %}
+        {
+            "tags": "{{ message.tags|default:'' }}",
+            "message": '{{ message.message|default:'' }}'
+        }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+];
+
+// Display each custom message using Toastify
+customMessages.forEach(message => {
+    showCToast(message.tags, message.message);
+});
+</script>
 </body>
 </html>

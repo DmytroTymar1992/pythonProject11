@@ -1,7 +1,8 @@
-{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8"/>
     <title>Головна</title>
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -10,6 +11,12 @@
             href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
             rel="stylesheet"
     />
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="stylesheet" href="{% static 'main/css/reset.css' %}"/>
     <link rel="stylesheet" href="{% static 'main/css/style.css' %}"/>
 </head>
@@ -21,11 +28,11 @@
                <div class="registration-content">
                    <div class="stepper-wrapper">
                        <div class="stepper-item">
-                           <div class="step-counter done"><img class="check-mark" src="{% static 'images/check-mark.svg' %}" alt="#"></div>
+                           <div class="step-counter done"><img class="check-mark" src="{% static 'main/images/check-mark.svg' %}" alt="#"></div>
                            <div class="step-name">Номер телефону</div>
                        </div>
                        <div class="stepper-item">
-                           <div class="step-counter done"><img class="check-mark" src="{% static 'images/check-mark.svg' %}" alt="#"></div>
+                           <div class="step-counter done"><img class="check-mark" src="{% static 'main/images/check-mark.svg' %}" alt="#"></div>
                            <div class="step-name">Підтвердження</div>
                        </div>
                        <div class="stepper-item step-completed">
@@ -37,25 +44,29 @@
                    <p class="form__subtitle">Введіть свої особисті дані, щоб завершити реєстрацію</p>
                    <form method="post" action="{% url 'register_seeker_step3' %}" class="form">
                        {% csrf_token %}
-                       <div class="form__input-wrapper">
 
-                           {{ form.first_name }}
+                       <div class="form__input-wrapper">
+                            <label for="name" class="text-medium-16">Введіть імʼя</label>
+                            {{ form.first_name }}
                        </div>
                        <div class="form__input-wrapper">
+                            <label for="name2" class="text-medium-16">Введіть прізвище</label>
+                            {{ form.last_name }}
+                       </div>
+                       <div class="form__input-wrapper_city">
+                            <label for="city" class=text-medium-16l">Введіть місто</label>
+                            {{ form.city_name }}
+                        <input type="hidden" name="city_id" id="id_city_id">
+                        <div id="city_not_found" style="display:none;color:red;">Місто не знайдено</div>
+                       </div>
 
-                           {{ form.last_name }}
+                       <div class="form__input-wrapper">
+                            <label for="pas1" class="text-medium-16">Пароль</label>
+                            {{ form.password1 }}
                        </div>
                        <div class="form__input-wrapper">
-
-                           {{ form.city }}
-                       </div>
-                       <div class="form__input-wrapper">
-
-                           {{ form.password1 }}
-                       </div>
-                       <div class="form__input-wrapper">
-
-                           {{ form.password2 }}
+                            <label for="pas5" class="text-medium-16">Повторіть пароль</label>
+                            {{ form.password2 }}
                        </div>
                        <div class="form__double-input-wrapper">
                            <a href="{% url 'register_seeker_step2' %}" class="form__link-back btn-transparent">Назад</a>
@@ -67,6 +78,139 @@
         </div>
     </main>
 </div>
-<script src="{% static 'main/index.js' %}"></script>
+<script src="{% static 'main/js/city_autocomplete.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="{% static 'main/js/messages-error.js' %}"></script>
+<script>
+    $(document).ready(function(){
+        $('#id_city_name').autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: "{% url 'get_city_suggestions' %}",
+                    dataType: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function(data) {
+                        response($.map(data, function(item) {
+                            return {
+                                label: item.name,
+                                value: item.name,
+                                id: item.id
+                            };
+                        }));
+                    }
+                });
+            },
+            minLength: 2,
+            select: function(event, ui) {
+                $('#id_city_name').val(ui.item.value);
+                $('#id_city_id').val(ui.item.id);
+                $('#city_not_found').hide();
+            },
+            change: function(event, ui) {
+                if (!ui.item) {
+                    $('#id_city_id').val('');
+                }
+            },
+            response: function(event, ui) {
+                if (ui.content.length === 0) {
+                    $('#city_not_found').show();
+                } else {
+                    $('#city_not_found').hide();
+                }
+            },
+            open: function(event, ui) {
+                var $input = $(event.target),
+                    $wrapper = $input.closest('.js_open'),
+                    wrapperWidth = $wrapper.outerWidth();
+
+                $input.autocomplete("widget").css('width', wrapperWidth + 'px');
+            },
+            classes: {
+                "ui-autocomplete": "search-location__select-list",
+                "ui-menu-item": "search-location__select-item"
+            },
+            appendTo: '.form__input-wrapper_city'
+        });
+
+        $('#id_city_name').on('blur', function() {
+            var cityName = $(this).val();
+            if (cityName) {
+                $.ajax({
+                    url: "{% url 'get_city_suggestions' %}",
+                    dataType: "json",
+                    data: {
+                        term: cityName
+                    },
+                    success: function(data) {
+                        var cityFound = false;
+                        $.each(data, function(index, item) {
+                            if (item.name.toLowerCase() === cityName.toLowerCase()) {
+                                $('#id_city_id').val(item.id);
+                                cityFound = true;
+                                $('#city_not_found').hide();
+                                return false;
+                            }
+                        });
+                        if (!cityFound) {
+                            $('#city_not_found').show();
+                            $('#id_city_id').val('');
+                        }
+                    }
+                });
+            }
+        });
+
+        // Function to display Toastify notifications
+        function showCToast(type, message) {
+            /*
+            type: info, success, error, default;
+            message: message to be displayed.
+            */
+            const colorMap = {
+                "info": '#63B3ED',
+                "success": '#2dce89',
+                "error": '#f5365c',
+                "default": "#20c997"
+            };
+
+            const color = colorMap[type] || colorMap["default"];
+
+            // Configure and display the toast notification
+            Toastify({
+                text: message,
+                duration: 3000,
+                className: type,
+                close: true,
+                gravity: "top",       // `top` or `bottom`
+                position: "right",   // `left`, `center` or `right`
+                stopOnFocus: true,    // Prevent dismissing of toast on hover
+                style: {
+                    background: color,
+                },
+                escapeMarkup: false,   // Render HTML tags in the notification
+            }).showToast();
+        }
+
+        // Extract Django messages and display them using Toastify
+        const customMessages = [
+            {% for message in messages %}
+                {
+                    "tags": "{{ message.tags|default:''|escapejs }}",
+                    "message": '{{ message.message|default:''|escapejs }}'
+                }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        // Debugging: Log messages to the console
+        console.log(customMessages);
+
+        // Display each custom message using Toastify
+        customMessages.forEach(message => {
+            showCToast(message.tags, message.message);
+        });
+    });
+    </script>
 </body>
 </html>

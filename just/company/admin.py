@@ -28,6 +28,7 @@ admin.site.register(JobCategory, JobCategoryAdmin)
 class JobPositionAdmin(admin.ModelAdmin):
     filter_horizontal = ('categories', 'groups')
     prepopulated_fields = {'slug': ('name',)}
+    search_fields = ('name', 'name_ru', 'groups__name')
 
 
 admin.site.register(JobPosition, JobPositionAdmin)

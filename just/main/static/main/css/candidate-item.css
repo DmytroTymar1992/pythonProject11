@@ -1,13 +1,13 @@
 .candidate-item__wrapper {
     display: flex;
     gap: 28px;
-    margin: 40px 0 80px;
+    margin: 40px 0 160px;
 }
 
 .candidate-item__left {
     flex-basis: 732px;
     padding: 24px;
-    background-color: var(--bg-color);
+    background-color: var(--bg-white);
     border-radius: 16px;
 }
 
@@ -58,9 +58,14 @@
     align-items: center;
     gap: 16px;
 }
+.candidate-item__bottom-buttons {
+    display: flex;
+    justify-content: space-between;
+}
 
 .candidate-item__bottom-text {
     font-size: 14px;
+    color: var(--grey-3);
 }
 
 .candidate-item__sidebar {
@@ -72,7 +77,7 @@
 }
 
 .candidate-item__sidebar-similar-resume {
-    background-color: var(--bg-color);
+    background-color: var(--bg-white);
     border-radius: 16px;
     padding: 24px;
 }
@@ -89,10 +94,10 @@
 }
 
 .candidate-item__card-mini__btn {
-    padding: 8px 10px;
+    padding: 8px 18px;
     border-radius: 8px;
     font-size: 14px;
-    font-weight: 500;
+    width: 130px;
 }
 
 .candidate-item__sidebar-btn-wrapper {
@@ -104,6 +109,10 @@
 .candidate-item__sidebar-btn {
     padding: 16px 41px;
     border-radius: 8px;
-    color: var(--dark-grey);
     font-weight: 500;
+}
+.candidate-item__card-mini {
+    padding: 16px;
+    border-radius: 16px;
+    background-color: #F4F4F4;
 }

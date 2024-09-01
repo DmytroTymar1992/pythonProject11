@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import User
 from .forms import CustomUserChangeForm
+from .models import Region, City
 
 
 class UserAdmin(BaseUserAdmin):
@@ -28,4 +29,13 @@ class UserAdmin(BaseUserAdmin):
 admin.site.register(User, UserAdmin)
 
 
+@admin.register(Region)
+class RegionAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
 
+@admin.register(City)
+class CityAdmin(admin.ModelAdmin):
+    list_display = ('name', 'name_ru', 'region', 'latitude', 'longitude')
+    search_fields = ('name', 'name_ru', 'region__name')
+    list_filter = ('region',)

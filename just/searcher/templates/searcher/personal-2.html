@@ -1,14 +1,8 @@
 {% extends "main/base.html" %}
 {% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Особистий кабінет</title>
-    {% block extra_styles %}
+{% block extra_styles %}
     <link rel="stylesheet" href="{% static 'main/css/personal.css' %}"/>
-    {% endblock %}
-</head>
-<body>
+{% endblock %}
 {% block content %}
 <div class="wrapper">
     <main>
@@ -22,19 +16,20 @@
                 <div class="personal__content-wrapper">
                     <aside class="personal__content-left">
                         <div class="personal__content-left-wrapper">
+                            <a href="{% url 'edit_profile' %}"><p class="aside-subtitle subtitle">Налаштування профілю</p></a>
                             <nav>
                                 <ul class="aside-nav__list">
-                                    <li class="text-medium-18"><a href="#">Налаштування профілю</a></li>
-                                    <li class="text-medium-18 aside-nav__active"><a href="#">Мої резюме</a></li>
-                                    <li class="text-medium-18"><a href="#">Історія відгуків</a></li>
+                                    <li class="aside-nav__list-item text-medium-18 aside-nav__active"><a href="{% url 'profile_resume_list' %}">Мої резюме</a></li>
+                                    <li class="aside-nav__list-item text-medium-18"><a href="#">Історія відгуків</a></li>
                                 </ul>
-                                <ul class="vacancy-info__list">
-                                    <li class="vacancy-info__list-item">
-                                        <a class="text-medium-18" href="#">Рекомендовані вакансії</a>
+                                <div class="aside-nav__line"></div>
+                                <ul class="aside-nav__list">
+                                    <li class="aside-nav__list-item text-medium-18">
+                                        <a href="#">Рекомендовані вакансії</a>
                                         <p class="vacancy-info__item-value">12</p>
                                     </li>
-                                    <li class="vacancy-info__list-item">
-                                        <a class="text-medium-18" href="#">Збережені вакансії</a>
+                                    <li class="aside-nav__list-item text-medium-18">
+                                        <a href="{% url 'profile_resume_saved_vacancies' %}">Збережені вакансії</a>
                                         <p class="vacancy-info__item-value">4</p>
                                     </li>
                                 </ul>
@@ -42,26 +37,31 @@
                             <div class="personal__logout__link-wrapper">
                                 <a href="#" class="logout__link text-medium-18">
                                     <img
-                                            src="../../images/log-in.svg"
+                                            src="../../images/log-in-red.svg"
                                             alt="search"
                                             class="search__img"
                                     />Вийти</a
                                 >
                             </div>
-
                         </div>
-
-
                     </aside>
                     <section class="personal__content-right">
                         <ul class="personal__vacancy-list">
-                            {% for resume in resumes %}
+                            {% for resume_data in resume_list %}
                             <li class="personal__vacancy-item">
+                                <a href="{% url 'resume_detail' resume_data.pk %}">
                                 <div class="personal__vacancy-item-left">
                                     <div class="personal__item-title-wrapper">
-                                        <h3 class="personal__vacancy-title">{{ resume.desired_positions }}</h3>
-                                        <p class="personal__item-title-text">Оновлено 3 місяці тому</p>
+                                        <h3 class="personal__vacancy-title">
+                                            {% for position in resume_data.resume.desired_positions.all %}
+                                            {{ position.name }}{% if not forloop.last %}, {% endif %}
+                                            {% endfor %}
+                                        </h3>
+                                        <p class="personal__item-title-text">Оновлено {{ resume_data.time_since_modified }} тому</p>
                                     </div>
+                                </div>
+                                </a>
+                                <div class="personal__title-icon-wrapper">
                                     <div class="personal__item-info-wrapper">
                                         <div class="personal__item-info">
                                             <p class="subtitle-text">250</p>
@@ -72,28 +72,29 @@
                                             <p class="subtitle-description">переглядів</p>
                                         </div>
                                     </div>
-                                </div>
-
-                                <div class="personal__title-icon-wrapper">
                                     <img
-                                            src="../../images/edit.svg"
+                                            src="{% static 'main/images/edit.svg' %}"
                                             alt="edit"
                                             class="personal__title-edit-icon"
                                     />
-                                    <img
+                                    <form action="{% url 'delete_resume' resume_data.pk %}" method="post">
+                                        {% csrf_token %}
+                                        <button class="delete-photo__btn btn-transparent__delete" type="submit" name="delete_avatar" value="1">
+                                        <img
                                             class="more-vertical-icon"
-                                            src="../../images/more-vertical.svg"
+                                            src="{% static 'main/images/delete.svg' %}"
                                             alt="more-vertical"
-                                    />
+                                        />
+                                        </button>
+                                    </form>
                                 </div>
                             </li>
-                            {% endfor %}
+                        {% endfor %}
                         </ul>
                         <a href="{% url 'create_resume' %}">
-                            <button class="personal__btn-add-resume btn-transparent">
-                                <img src="../../images/add-circle-dark.svg" alt="add-circle">
-                                Cтворити ще одне резюме
-                            </button>
+                        <button class="add-btn-item add-btn-icon personal__btn-add-resume btn-transparent">
+                            Cтворити ще одне резюме
+                        </button>
                         </a>
                     </section>
                 </div>
@@ -102,6 +103,4 @@
     </main>
 </div>
 {% endblock %}
-<script src="../../index.js"></script>
-</body>
-</html>
+

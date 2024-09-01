@@ -1,0 +1,565 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% load filters %}
+
+
+    <title>Вакансії</title>
+    {% block extra_styles %}
+
+
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <link rel="stylesheet" href="{% static 'main/css/personal.css' %}"/>
+    <link rel="stylesheet" href="{% static 'main/css/vacancies-page.css' %}">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    {% endblock %}
+
+{% block content %}
+<div class="wrapper">
+    <div class="bg-blur bg-blur__vacancies-page-2"></div>
+    <main class="main">
+        <div class="container">
+            <div class="vacancies__search-location-wrapper">
+                <div class="search-location">
+                {% include 'searcher/search_vacancy_form.html' with form=form %}
+            </div>
+            </div>
+
+            <section class="vacancies">
+                <div class="vacancies__left">
+                    <div class="vacancies__filter-block">
+                        <p class="vacancies__filter-block-text"> 2000 вакансій </p>
+                        <div class="search__filter">
+                            <img src="{% static 'main/images/sort.svg' %}" alt="filter" class="search__filter-img">
+                            <button class="search__filter-btn">Спочатку нові</button>
+                        </div>
+                    </div>
+                    <div class="vacancies__cards-wrapper">
+                        <ul class="vacancies__cards">
+                             {% for vacancy in vacancies %}
+                            <li class="vacancies__cards-item">
+                                <div class="vacancies__card">
+                                    <nav>
+                                        <ul class="vacancies__card-hashtags">
+                                            {% if vacancy.status == 'hot' %}
+                                            <li class="vacancies__card-hashtags-item hashtags-hot">
+                                                <img src="{% static 'main/images/local_fire.svg' %}" alt="fire">
+                                                <a href="#" class="vacancies__card-hashtags-link">
+                                                    Гаряча вакансія
+                                                </a>
+                                            </li>
+                                            {% endif %}
+                                            {% if vacancy.hashtags.all %}
+                                                {% for hashtag in vacancy.hashtags.all %}
+                                                    <li class="vacancies__card-hashtags-item type-purple-italic">
+                                                        <a href="#" class="vacancies__card-hashtags-link">
+                                                            {{ hashtag.name }}
+                                                        </a>
+                                                    </li>
+                                                {% endfor %}
+                                            {% endif %}
+                                            <li class="vacancies__card-hashtags-item">
+                                                <a href="#" class="vacancies__card-hashtags-link">Дистанційно</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+
+                                    <div class="vacancies__card-top">
+                                        <div class="vacancies__card-top-left">
+                                            <a href="{% url 'vacancy_detail' slug=vacancy.position.slug vacancy_id=vacancy.id %}">
+                                                <h3 class="vacancies__card-title">{{ vacancy.position.name }}</h3>
+                                            </a>
+                                            <div class="vacancies__card-additional-info">
+                                                <div class="text-btn">
+                                                    {% if vacancy.min_salary and vacancy.max_salary %}
+                                                        {{ vacancy.min_salary|intspace }} - {{ vacancy.max_salary|intspace }} ₴
+                                                    {% elif vacancy.min_salary %}
+                                                        Від {{ vacancy.min_salary|intspace }} ₴
+                                                    {% elif vacancy.max_salary %}
+                                                        До {{ vacancy.max_salary|intspace }} ₴
+                                                    {% endif %}
+                                                </div>
+                                                <div class="location-block">
+                                                    <img class="location-img" src="{% static 'main/images/marker-pin-01.svg' %}"
+                                                         alt="location">
+                                                    <p class="location-text">{{vacancy.city}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="vacancies__card-top-right">
+                                            <img src="{% static 'main/images/samsung.svg' %}" alt="samsung">
+                                            <p>{{vacancy.company}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="vacancies__card-vacancy-info-wrapper">
+                                        <ul class="vacancies__card-vacancy-info">
+                                            <li class="vacancies__card-vacancy-info-item type-purple-italic">{{vacancy.get_employment_type_display}}
+                                            </li>
+                                            <li class="vacancies__card-vacancy-info-item type-green">
+                                                <img src="{% static 'main/images/check-circle-broken.svg' %}" alt="check">{{vacancy.get_experience_display}}
+                                            </li>
+                                            <li class="vacancies__card-vacancy-info-item type-blue">
+                                                <img src="{% static 'main/images/money-bag.svg' %}" alt="money">{{vacancy.get_schedule_display}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="vacancies__card-bottom-wrapper">
+                                        <div class="vacancies__card-bottom">
+                                            <div class="vacancies__card-bottom-buttons">
+                                                {% if vacancy.id in feedback_vacancies_ids %}
+                                                <a href="#"
+                                                   class="vacancies__card-bottom-btn btn-color btn-feedback"
+                                                   data-vacancy-id="{{ vacancy.id }}">
+                                                    <img src="{% static 'main/images/galka.svg' %}" alt="check">
+                                                    Ви відгукнутись</a>
+
+                                                {% else %}
+                                                <a href="#"
+                                                   class="vacancies__card-bottom-btn btn-color btn-feedback"
+                                                   data-vacancy-id="{{ vacancy.id }}">Відгукнутись</a>
+                                                {% endif %}
+                                                <a href="#"
+                                                   class="vacancies__card-bottom-btn btn-transparent">Детальніше</a>
+                                            </div>
+                                            <label class="heart-icon__label text-medium-16 btn-save {% if vacancy.id in saved_vacancies_ids %}saved{% endif %}" data-vacancy-id="{{ vacancy.id }}">
+                                                <input class="heart-icon__input" type="checkbox" {% if vacancy.id in saved_vacancies_ids %}checked{% endif %}>
+                                                <i></i>
+                                                <span>Зберегти</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <div class="vacancies-page__pagination">
+                            <div class="pagination__block">
+                                <div class="pagination">
+                                    <a href="#"><img src="{% static 'main/images/vector-left.svg' %}" alt=""></a>
+                                    <a class="active" href="#">1</a>
+                                    <a href="#">2</a>
+                                    <a href="#">3</a>
+                                    <a href="#">4</a>
+                                    <a href="#">5</a>
+                                    <a href="#">...</a>
+                                    <a href="#">25</a>
+                                    <a href="#"><img src="{% static 'main/images/vector-right.svg' %}" alt=""></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="vacancies__right">
+                    <div class="vacancies__right-content">
+                        <details>
+                            <summary>Категорія</summary>
+                            <ul class="drop-down__list">
+                                {% for category in categories %}
+                                    <li class="drop-down__item">
+
+                                            <a href="?category={{ category.position__categories__id }}">
+                                                <span class="text-medium-16">{{ category.position__categories__name }}</span>
+                                            </a>
+
+                                        <div class="select__option-value-wrapper">
+                                            <span class="select__option-value">{{ category.count }}</span>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+
+                            </ul>
+                        </details>
+                        <details>
+                            <summary>Зайнятість</summary>
+                            <ul class="drop-down__list">
+                                <li class="drop-down__item">
+                                    <label class="container-label ">
+                                        <span class="text-medium-16">Повна зайнятість</span>
+                                        <input type="checkbox" checked="checked"/>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <div class="select__option-value-wrapper">
+                                        <span class="select__option-value">1650</span>
+                                    </div>
+                                </li>
+                                <li class="drop-down__item">
+                                    <label class="container-label ">
+                                        <span class="text-medium-16">Неповна зайнятість</span>
+                                        <input type="checkbox"/>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <div class="select__option-value-wrapper">
+                                        <span class="select__option-value">250</span>
+                                    </div>
+                                </li>
+                                <li class="drop-down__item">
+                                    <label class="container-label ">
+                                        <span class="text-medium-16">Позмінна робота</span>
+                                        <input type="checkbox" />
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <div class="select__option-value-wrapper">
+                                        <span class="select__option-value">96</span>
+                                    </div>
+                                </li>
+                                <li class="drop-down__item">
+                                    <label class="container-label ">
+                                        <span class="text-medium-16">Дистанційна</span>
+                                        <input type="checkbox"/>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <div class="select__option-value-wrapper">
+                                        <span class="select__option-value">4</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </details>
+                        <details>
+                            <summary>Зарплата</summary>
+                            <ul class="drop-down__list">
+                                <li class="drop-down__item">
+                                    <label class="container-label ">
+                                        <span class="text-medium-16">Повна зайнятість</span>
+                                        <input type="checkbox" checked="checked"/>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <div class="select__option-value-wrapper">
+                                        <span class="select__option-value">1650</span>
+                                    </div>
+                                </li>
+                                <li class="drop-down__item">
+                                    <label class="container-label ">
+                                        <span class="text-medium-16">Неповна зайнятість</span>
+                                        <input type="checkbox"/>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <div class="select__option-value-wrapper">
+                                        <span class="select__option-value">250</span>
+                                    </div>
+                                </li>
+                                <li class="drop-down__item">
+                                    <label class="container-label ">
+                                        <span class="text-medium-16">Позмінна робота</span>
+                                        <input type="checkbox" />
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <div class="select__option-value-wrapper">
+                                        <span class="select__option-value">96</span>
+                                    </div>
+                                </li>
+                                <li class="drop-down__item">
+                                    <label class="container-label ">
+                                        <span class="text-medium-16">Дистанційна</span>
+                                        <input type="checkbox"/>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <div class="select__option-value-wrapper">
+                                        <span class="select__option-value">4</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </details>
+                        <details>
+                            <summary>Знання мов</summary>
+                            <ul class="drop-down__list">
+                                <li class="drop-down__item">
+                                    <label class="container-label ">
+                                        <span class="text-medium-16">Повна зайнятість</span>
+                                        <input type="checkbox" checked="checked"/>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <div class="select__option-value-wrapper">
+                                        <span class="select__option-value">1650</span>
+                                    </div>
+                                </li>
+                                <li class="drop-down__item">
+                                    <label class="container-label ">
+                                        <span class="text-medium-16">Неповна зайнятість</span>
+                                        <input type="checkbox"/>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <div class="select__option-value-wrapper">
+                                        <span class="select__option-value">250</span>
+                                    </div>
+                                </li>
+                                <li class="drop-down__item">
+                                    <label class="container-label ">
+                                        <span class="text-medium-16">Позмінна робота</span>
+                                        <input type="checkbox" />
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <div class="select__option-value-wrapper">
+                                        <span class="select__option-value">96</span>
+                                    </div>
+                                </li>
+                                <li class="drop-down__item">
+                                    <label class="container-label ">
+                                        <span class="text-medium-16">Дистанційна</span>
+                                        <input type="checkbox"/>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <div class="select__option-value-wrapper">
+                                        <span class="select__option-value">4</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </details>
+                        <details>
+                            <summary>Підходить для</summary>
+                            <ul class="drop-down__list">
+                                <li class="drop-down__item">
+                                    <label class="container-label ">
+                                        <span class="text-medium-16">Повна зайнятість</span>
+                                        <input type="checkbox" checked="checked"/>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <div class="select__option-value-wrapper">
+                                        <span class="select__option-value">1650</span>
+                                    </div>
+                                </li>
+                                <li class="drop-down__item">
+                                    <label class="container-label ">
+                                        <span class="text-medium-16">Неповна зайнятість</span>
+                                        <input type="checkbox"/>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <div class="select__option-value-wrapper">
+                                        <span class="select__option-value">250</span>
+                                    </div>
+                                </li>
+                                <li class="drop-down__item">
+                                    <label class="container-label ">
+                                        <span class="text-medium-16">Позмінна робота</span>
+                                        <input type="checkbox" />
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <div class="select__option-value-wrapper">
+                                        <span class="select__option-value">96</span>
+                                    </div>
+                                </li>
+                                <li class="drop-down__item">
+                                    <label class="container-label ">
+                                        <span class="text-medium-16">Дистанційна</span>
+                                        <input type="checkbox"/>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <div class="select__option-value-wrapper">
+                                        <span class="select__option-value">4</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </details>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+        {% include 'feedback/select_resume_modal.html' %}
+        {% include 'feedback/feedback_lead_modal.html' %}
+    </main>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="{% static 'main/js/index.js' %}"></script>
+<script src="{% static 'main/js/messages-error.js' %}"></script>
+<script src="{% static 'main/select.js' %}"></script>
+<script>
+    // Функція для показу повідомлень Toastify
+    $(document).ready(function() {
+    // Функція для показу повідомлень Toastify
+    function showCToast(type, message) {
+        const colorMap = {
+            "info": '#63B3ED',
+            "success": '#2dce89',
+            "error": '#f5365c',
+            "default": "#20c997"
+        };
+
+        const color = colorMap[type] || colorMap["default"];
+
+        Toastify({
+            text: message,
+            duration: 3000,
+            className: type,
+            close: true,
+            gravity: "top",
+            position: "right",
+            stopOnFocus: true,
+            style: {
+                background: color,
+            },
+            escapeMarkup: false,
+        }).showToast();
+    }
+
+    // Обробка кліку на кнопку збереження вакансії
+    $(".btn-save").click(function(event) {
+        event.preventDefault();
+
+        var button = $(this);
+        var vacancyId = button.data("vacancy-id");
+
+        $.ajax({
+            url: "{% url 'toggle_save_vacancy' 0 %}".replace('0', vacancyId),
+            type: 'POST',
+            data: {
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(response) {
+                var input = button.find('input.heart-icon__input');
+                if (response.status == 'saved') {
+                    input.prop('checked', true);
+                    button.addClass('saved');
+                } else if (response.status == 'deleted') {
+                    input.prop('checked', false);
+                    button.removeClass('saved');
+                } else if (response.status == 'error') {
+                    showCToast('error', response.message);
+                    if (response.message === "Увійдіть, щоб мати можливість зберігати вакансії.") {
+                        openLoginModal(); // Виклик функції для відкриття модального вікна
+                    }
+                }
+            },
+            error: function(response) {
+                if (response.status === 403) {
+                    var jsonResponse = JSON.parse(response.responseText);
+                    showCToast('error', jsonResponse.message);
+                    if (jsonResponse.message === "Увійдіть, щоб мати можливість зберігати вакансії.") {
+                        openLoginModal(); // Виклик функції для відкриття модального вікна
+                    }
+                } else {
+                    alert("Виникла помилка при збереженні вакансії");
+                }
+            }
+        });
+    });
+
+    // Обробка кліку на кнопку "Відгукнутись"
+    $('.btn-feedback').on('click', function(event) {
+        event.preventDefault();
+
+        var button = $(this);
+        var vacancyId = button.data('vacancy-id');
+
+        $.ajax({
+            url: "{% url 'save_feedback' 0 %}".replace('0', vacancyId),
+            type: 'POST',
+            data: {
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(response) {
+                if (response.status === 'select_resume') {
+                    var modal = $('#resumeModal');
+                    modal.show();
+
+                    // Зберігаємо `vacancyId` і `button` для використання в функції `resumeForm`
+                    $('#resumeForm').data('vacancy-id', vacancyId);
+                    $('#resumeForm').data('button', button);
+                } else if (response.status === 'success') {
+                    showCToast('success', response.message);
+                    button.text('Ви відгукнулись');
+                    button.addClass('disabled');
+                } else if (response.status === 'error') {
+                    showCToast('error', response.message);
+                } else if (response.status === 'lead') {
+                    // Відображаємо модальне вікно для введення даних ліда
+                    var leadModal = $('#leadModal');
+                    leadModal.show();
+
+                    // Зберігаємо `vacancyId` для використання в формі ліда
+                    $('#leadForm').data('vacancy-id', vacancyId);
+                }
+            },
+            error: function(response) {
+                showCToast('error', 'Виникла помилка при відгуку.');
+            }
+        });
+    });
+
+    // Закриття модального вікна при кліку на X
+    $('.close').on('click', function() {
+        $('#resumeModal').hide();
+        $('#leadModal').hide();
+    });
+
+    // Надсилання вибраного резюме
+    $('#resumeForm').on('submit', function(event) {
+        event.preventDefault();
+
+        var selectedResumeId = $('input[name="resume_id"]:checked').val();
+        var vacancyId = $(this).data('vacancy-id');
+        var button = $(this).data('button');
+
+        if (selectedResumeId) {
+            $.ajax({
+                url: "{% url 'save_feedback' 0 %}".replace('0', vacancyId),
+                type: 'POST',
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    'resume_id': selectedResumeId
+                },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        showCToast('success', response.message);
+                        $('#resumeModal').hide();
+                        button.text('Ви відгукнулись');
+                        button.addClass('disabled');
+                    } else {
+                        showCToast('error', response.message);
+                    }
+                },
+                error: function(response) {
+                    showCToast('error', 'Виникла помилка при відгуку.');
+                }
+            });
+        } else {
+            showCToast('error', 'Оберіть резюме.');
+        }
+    });
+
+    // Надсилання форми ліда
+    $('#leadForm').on('submit', function(event) {
+        event.preventDefault();
+
+        var form = $(this);
+        var vacancyId = form.data('vacancy-id');
+
+
+        $.ajax({
+            url: "{% url 'save_lead_feedback' 0 %}".replace('0', vacancyId),
+            type: 'POST',
+            data: form.serialize(),
+            success: function(response) {
+                if (response.status === 'success') {
+                    showCToast('success', response.message);
+                    $('#leadModal').hide();
+                } else if (response.status === 'error') {
+                    showCToast('error', response.message);
+                }
+            },
+            error: function(response) {
+                if (response.responseJSON && response.responseJSON.message) {
+                    showCToast('error', response.responseJSON.message);
+                } else {
+                    showCToast('error', 'Виникла помилка при відправленні.');
+                }
+            }
+        });
+    });
+
+    // Функція для відкриття модального вікна входу
+    function openLoginModal() {
+        const modal = document.getElementById("myModal");
+        modal.style.display = "flex";
+        window.document.body.classList.toggle("no-scroll");
+    }
+});
+</script>
+
+
+
+{% endblock %}

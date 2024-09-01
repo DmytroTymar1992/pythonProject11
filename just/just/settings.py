@@ -45,6 +45,10 @@ INSTALLED_APPS = [
     'employer',
     'main',
     'searcher',
+    'resume',
+    'vacancies',
+    'management',
+    'feedback',
 
     'dal',
     'dal_select2',
@@ -53,6 +57,8 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'django_password_validators',
     'django_select2',
+    'django.contrib.humanize',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -79,9 +85,15 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'employer.context_processors.vacancies_count',
+
+
+
             ],
+
         },
     },
+
 ]
 
 WSGI_APPLICATION = 'just.wsgi.application'
@@ -90,10 +102,21 @@ WSGI_APPLICATION = 'just.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+#DATABASES = {
+#   'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': BASE_DIR / 'db.sqlite3',
+#    }
+#}
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'just',  # Назва вашої бази даних
+        'USER': 'just_admin',  # Ім'я користувача PostgreSQL
+        'PASSWORD': '1123456',  # Пароль користувача PostgreSQL
+        'HOST': 'localhost',  # Або інша адреса, де запущений PostgreSQL
+        'PORT': '5432',  # Порт за замовчуванням для PostgreSQL
     }
 }
 
@@ -121,7 +144,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
@@ -176,3 +199,5 @@ LOGGING = {
 # Переконайтеся, що встановлені відповідні налаштування сесії
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Використовуємо базу даних для сесій
 
+
+LOGOUT_REDIRECT_URL = '/'

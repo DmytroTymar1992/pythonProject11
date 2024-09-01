@@ -1,55 +1,71 @@
 {% extends "main/base.html" %}
 {% load crispy_forms_tags %}
 {% load static %}
-<html lang="en">
 <head>
     <meta charset="UTF-8"/>
     <title>Створення вакансії</title>
     {% block extra_styles %}
-
     <link rel="stylesheet" href="{% static 'main/css/create-vacancy.css' %}"/>
+    <link rel="stylesheet" href="{% static 'main/css/personal.css' %}"/>
     {% endblock %}
 </head>
-<body>
-<div class="wrapper">
-    {% block content %}
+{% block content %}
+    <div class="bg-blur bg-blur__create-vacancy"></div>
     <main>
         <div class="container">
             <div class="create-vacancy__inner">
                 <h1 class="title-xl">Створення вакансії</h1>
                 <div class="create-vacancy__content-wrapper">
                     <section class="create-vacancy__content-left">
-                        <form class="form__inner" method="post">
+                        <form class="form__inner vacancy-form" method="post" action="{% url 'create_vacancy' %}">
                             {% csrf_token %}
-                            <fieldset class="form-field">
-                                <h3 class="form__subtitle-md">Основна інформація</h3>
+                            <fieldset id="info" class="form-field section">
+                                <h3 class="title-article">Основна інформація</h3>
                                 <div class="form__inputs-wrapper">
-                                    <div class="form__input-horizontal-wrapper">
-                                        <label for="id_position_name" class="text-medium-16"
+                                    <div class="form__input-horizontal-list-wrapper">
+                                        <label for="id_position" class="label-list text-medium-16"
                                         >Назва посади</label
                                         >
-                                        {{ form.position_name }}
+                                        {{ form.position }}
+
+                                    </div>
+                                    <span id="position-error-message" class="error-message">Посаду не знайдено</span>
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label for="id_position_comment" class="text-medium-16"
+                                        >Коментар до посади</label
+                                        >
+                                        {{ form.position_comment }}
                                     </div>
                                     <div class="form__input-horizontal-wrapper">
-                                        <label for="id_category" class="text-medium-16">Категорія</label>
-                                        <div id="category_list"></div>
+                                        <span class="text-medium-16">Категорія</span>
+                                            <div class="type-category-wrapper">
+                                                <div id="category_list" class="category_list"></div>
+                                            </div>
                                     </div>
                                 </div>
                             </fieldset>
-                            <fieldset class="form-field">
-                                <h3 class="form__subtitle-md">Умови роботи</h3>
+                            <fieldset id="conditions" class="form-field section">
+                                <h3 class="title-article">Умови роботи</h3>
                                 <div class="form__inputs-wrapper">
                                     <div class="form__input-horizontal-wrapper">
                                         <label for="place" class="text-medium-16"
                                         >Місто роботи</label
                                         >
                                         {{ form.city }}
+
                                     </div>
+                                    <span id="city-error-message" class="error-message">Місто не знайдено</span>
                                     <div class="form__input-horizontal-wrapper">
                                         <label for="address" class="text-medium-16"
                                         >Адреса роботи</label
                                         >
                                         {{ form.address }}
+                                    </div>
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label for="id_phone_number" class="text-medium-16"
+                                        >Номер телефону</label
+                                        >
+                                        {{ form.phone_number }}
                                     </div>
                                     <div class="form__input-horizontal-wrapper">
                                         <label class="text-medium-16">Зарплата</label>
@@ -59,118 +75,62 @@
                                             <span>-</span>
                                             <label for="to" class="label-hidden"></label>
                                             {{ form.max_salary }}
-
                                         </div>
+                                    </div>
+                                    <div class="input-add__wrapper">
+                                        <label for="student" class="create__container-label">
+                                            <input class="personal__checkbox" id="student" type="checkbox"/>
+                                            <span class="create__checkmark"></span>
+                                        </label>
+                                        <label for="student">Не вказувати</label>
+                                    </div>
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label for="schedule" class="text-medium-16"
+                                        >Графік роботи</label
+                                        >
+                                        <div class="create-resume__select-wrapper create-resume__select-size-lg">
+                                        {{ form.schedule }}
+                                        </div>
+                                    </div>
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label for="hashtags" class="text-medium-16"
+                                        >Хештеги</label
+                                        >
+                                        <input
+                                                id="hashtags"
+                                                class="form__input create-vacancy__input-size"
+                                                type="text"
+                                                placeholder="#"
+                                        />
+                                    </div>
+                                    <div class="form__input-horizontal-wrapper">
+                                        <label for="hashtags" class="text-medium-16"
+                                        >Соц. Мережі</label
+                                        >
+                                        {{ form.social_networks }}
                                     </div>
                                     <div class="form__input-horizontal-wrapper">
                                         <ul class="form__input-checkbox-wrapper">
                                             <li class="form__input-checkbox-item">
-                                                <p class="title-checkbox-item">Тип зайнятості</p>
-                                                <div class="form__checkbox-wrapper">
-                                                    <input
-                                                            id="full"
-                                                            type="checkbox"
-                                                            name="work schedule"
-                                                    />
-                                                    <label class="label-checkbox" for="full"
-                                                    >Повна зайнятість</label
-                                                    >
-                                                </div>
-                                                <div class="form__checkbox-wrapper">
-                                                    <input
-                                                            id="part"
-                                                            type="checkbox"
-                                                            name="work schedule"
-                                                    />
-                                                    <label class="label-checkbox" for="part"
-                                                    >Неповна зайнятість</label
-                                                    >
-                                                </div>
-                                                <div class="form__checkbox-wrapper">
-                                                    <input
-                                                            id="stuff"
-                                                            type="checkbox"
-                                                            name="work schedule"
-                                                    />
-                                                    <label class="label-checkbox" for="stuff"
-                                                    >Позмінна робота</label
-                                                    >
-                                                </div>
+                                                <p class="title-checkbox-item">Тип зайнятості*</p>
+                                                {{ form.employment_type }}
                                             </li>
                                             <li class="form__input-checkbox-item">
                                                 <p class="title-checkbox-item">Характер роботи</p>
-                                                <div class="form__checkbox-wrapper">
-                                                    <input
-                                                            id="practice"
-                                                            type="checkbox"
-                                                            name="work schedule"
-                                                    />
-                                                    <label class="label-checkbox" for="practice"
-                                                    >Стажування/практика</label
-                                                    >
-                                                </div>
-                                                <div class="form__checkbox-wrapper">
-                                                    <input
-                                                            id="remote"
-                                                            type="checkbox"
-                                                            name="work schedule"
-                                                    />
-                                                    <label class="label-checkbox" for="remote"
-                                                    >Віддалена робота</label
-                                                    >
-                                                </div>
-                                                <div class="form__checkbox-wrapper">
-                                                    <input
-                                                            id="office"
-                                                            type="checkbox"
-                                                            name="work schedule"
-                                                    />
-                                                    <label class="label-checkbox" for="office"
-                                                    >Робота в офісі</label
-                                                    >
-                                                </div>
-                                                <div class="form__checkbox-wrapper">
-                                                    <input
-                                                            id="hybrid"
-                                                            type="checkbox"
-                                                            name="work schedule"
-                                                    />
-                                                    <label class="label-checkbox" for="hybrid"
-                                                    >Гібридна робота</label
-                                                    >
-                                                </div>
+                                                {{ form.education_level }}
                                             </li>
                                             <li class="form__input-checkbox-item">
                                                 <p class="title-checkbox-item">
                                                     Готовність до переїзду
                                                 </p>
-                                                <div class="form__checkbox-wrapper">
-                                                    <input
-                                                            id="ready"
-                                                            type="radio"
-                                                            name="work schedule"
-                                                    />
-                                                    <label class="label-checkbox" for="ready"
-                                                    >Можу виїхати за потреби</label
-                                                    >
-                                                </div>
-                                                <div class="form__checkbox-wrapper">
-                                                    <input
-                                                            id="no-ready"
-                                                            type="radio"
-                                                            name="work schedule"
-                                                    />
-                                                    <label class="label-checkbox" for="no-ready"
-                                                    >НЕ готовий до переїзду</label
-                                                    >
-                                                </div>
+                                                {{ form.experience }}
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
                             </fieldset>
-                            <fieldset class="form-field">
-                                <h3 class="form__subtitle-md">Опис посади</h3>
+                            <fieldset id="desc" class="form-field section">
+                                <h3 class="title-article">Опис посади</h3>
                                 <div class="form__inputs-wrapper">
                                     <label for="desc-role" class="label-hidden"
                                     >Адреса роботи</label
@@ -183,9 +143,17 @@
                                     для bold
                                 </p>
                             </fieldset>
+                            <div class="create-vacancy__checkbox-wrapper">
+                                    <label for="duplicate" class="create__container-label">
+                                        <input class="personal__checkbox" id="duplicate" type="checkbox"/>
+                                        <span class="create__checkmark"></span>
+                                    </label>
+                                    <label for="duplicate">Не вказувати</label>
+                            </div>
                             {{ form.status }}
 
-                            <div class="form__button-wrapper">
+
+                            <div class="create-vacancy__button-wrapper">
                                 <button
                                         type="submit"
                                         class="create-vacancy__create-btn btn-color"
@@ -202,15 +170,31 @@
                         </form>
                     </section>
                     <aside class="create-vacancy__content-right">
-                        <div class="news-item__article-right">
-                            <div class="v-progress">
-                                <ul>
-                                    <li class="v-progress-item completed active">
-                                        Основна інформація
-                                    </li>
-                                    <li class="v-progress-item inprogress">Умови роботи</li>
-                                    <li class="v-progress-item inprogress">Опис вакансії</li>
-                                </ul>
+                        <div class="right-content__sticky">
+                            <div class="news-item__article-right">
+                                <div class="container-stepper">
+                                    <div class="step">
+                                        <div class="v-stepper">
+                                            <div class="circle"></div>
+                                            <div class="line"></div>
+                                        </div>
+                                        <a class="active" href="#info">Основна інформація</a>
+                                    </div>
+                                    <div class="step">
+                                        <div class="v-stepper">
+                                            <div class="circle"></div>
+                                            <div class="line"></div>
+                                        </div>
+                                        <a href="#conditions">Умови роботи</a>
+                                    </div>
+                                    <div class="step">
+                                        <div class="v-stepper">
+                                            <div class="circle"></div>
+                                            <div class="line"></div>
+                                        </div>
+                                        <a href="#desc">Опис вакансії</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </aside>
@@ -218,46 +202,20 @@
             </div>
         </div>
     </main>
-    {% endblock %}
-</div>
-{% block extra_js %}
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-        <script>
-            $(function() {
-            $('#id_position_name').autocomplete({
-                source: function (request, response) {
-                    $.ajax({
-                        url: "",
-                        dataType: "json",
-                        data: {
-                            term: request.term
-                        },
-                        success: function (data) {
-                            response(data);
-                        }
-                    });
-                },
-                minLength: 2,
-                select: function (event, ui) {
-                    // Handle the category loading here
-                    $.ajax({
-                        url: "{% url 'get_categories' %}",
-                        data: {
-                            position: ui.item.value
-                        },
-                        success: function (data) {
-                            var categoryList = $('#category_list');
-                            categoryList.empty();
-                            $.each(data, function (key, value) {
-                                categoryList.append('<p>' + value + '</p>');
-                            });
-                        }
-                    });
-                }
-            });
-        });
-    </script>
 {% endblock %}
-</body>
-</html>
+{% block extra_js %}
+    <!-- Підключення jQuery та jQuery UI -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+    <script>
+        const positionAutocompleteUrl = "{% url 'position-autocomplete' %}";
+        const getCategoriesUrl = "{% url 'get_categories' %}";
+        const cityAutocompleteUrl = "{% url 'city-autocomplete' %}";
+    </script>
+    <script src="{% static 'main/js/autocomplete-position.js' %}"></script>
+    <script src="{% static 'main/js/autocomplete-city.js' %}"></script>
+    <script src="{% static 'main/js/autocomplete-eror.js' %}"></script>
+{% endblock %}
+

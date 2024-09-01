@@ -1,5 +1,6 @@
 {% extends "main/base.html" %}
 {% load static %}
+{% load filters %}
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
@@ -21,72 +22,73 @@
                 <div class="personal__content-wrapper">
                     <aside class="personal__content-left">
                         <div class="personal__content-left-wrapper">
+                            <p class="aside-subtitle subtitle">Налаштування профілю</p>
                             <nav>
                                 <ul class="aside-nav__list">
-                                    <li class="text-medium-18">
-                                        <a href="#">Налаштування профілю</a>
-                                    </li>
-                                    <li class="vacancy-info__list-item">
-                                        <a class="text-medium-18 aside-nav__active" href="#">Вакансії</a>
+                                    <li class="aside-nav__list-item text-medium-18 aside-nav__active">
+                                        <a href="{% url 'profile_vacancy_list' %}">Вакансії</a>
                                         <p class="vacancy-info__item-value">3</p>
                                     </li>
-                                    <li class="vacancy-info__list-item">
-                                        <a class="text-medium-18" href="#">Відгуки</a>
+                                    <li class="aside-nav__list-item text-medium-18 ">
+                                        <a href="{% url 'employer_feedback_list' %}">Відгуки</a>
                                         <p class="vacancy-info__item-value">123</p>
                                     </li>
                                 </ul>
+                                <div class="aside-nav__line"></div>
                                 <ul class="aside-nav__list">
-                                    <li class="vacancy-info__list-item">
-                                        <a class="text-medium-18" href="#">Потенційни Кандидати</a>
+                                    <li class="aside-nav__list-item text-medium-18">
+                                        <a href="#">Потенційни Кандидати</a>
                                         <p class="vacancy-info__item-value">430</p>
                                     </li>
-                                    <li class="vacancy-info__list-item">
-                                        <a class="text-medium-18" href="#">Збережені Кандидати</a>
+                                    <li class="aside-nav__list-item text-medium-18">
+                                        <a href="#">Збережені Кандидати</a>
                                         <p class="vacancy-info__item-value">12</p>
                                     </li>
                                 </ul>
-                                <ul class="vacancy-info__list">
-                                    <li class="vacancy-info__list-item">
-                                        <a class="text-medium-18" href="#">Аналітика</a>
-
+                                <div class="aside-nav__line"></div>
+                                <ul class="aside-nav__list">
+                                    <li class="aside-nav__list-item text-medium-18">
+                                        <a href="#">Аналітика</a>
                                     </li>
-                                    <li class="vacancy-info__list-item">
-                                        <a class="text-medium-18" href="#">Оплата</a>
-
+                                    <li class="aside-nav__list-item text-medium-18">
+                                        <a href="#">Оплата</a>
                                     </li>
-                                    <li class="vacancy-info__list-item">
-                                        <a class="text-medium-18" href="#">Реквізити</a>
-
+                                    <li class="aside-nav__list-item text-medium-18">
+                                        <a href="#">Реквізити</a>
                                     </li>
                                 </ul>
                             </nav>
                             <div class="personal__logout__link-wrapper">
-                                <a href="#" class="logout__link text-medium-18">
+                                <a href="{% url 'logout' %}" class="logout__link text-medium-18">
                                     <img
-                                            src="../../images/log-in.svg"
+                                            src="{% static 'main/images/log-in.svg' %}"
                                             alt="search"
                                             class="search__img"
                                     />Вийти</a
                                 >
                             </div>
-
                         </div>
-
-
                     </aside>
                     <section class="personal__content-right">
                         <div class="personal__filter-block">
-                            <ul class="user__actions">
-
-                                <li class="user__actions-item ">
-                                    <a href="#" class="user__actions-btn user__actions-btn-active">Активні (3)</a>
-                                </li>
-                                <li class="user__actions-item">
-                                    <a href="#" class="user__actions-btn ">Закриті (0)</a>
-                                </li>
-                            </ul>
+                            <form method="get" action="{% url 'profile_vacancy_list' %}">
+                                <ul class="user__actions">
+                                    <li class="user__actions-item">
+                                        <label class="user__actions-btn-label">
+                                            <input type="radio" name="status" value="active" class="user__actions-radio" {% if status == 'active' %}checked{% endif %} onchange="this.form.submit();">
+                                            <span class="user__actions-btn">Активні ({{active_vacancies_count}})</span>
+                                        </label>
+                                    </li>
+                                    <li class="user__actions-item">
+                                        <label class="user__actions-btn-label">
+                                            <input type="radio" name="status" value="closed" class="user__actions-radio" {% if status == "closed" %}checked{% endif %} onchange="this.form.submit();">
+                                            <span class="user__actions-btn">Закриті ({{closed_vacancies_count}})</span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </form>
                             <div class="search__filter">
-                                <img src="../../images/sort.svg" alt="filter" class="search__filter-img">
+                                <img src="{% static 'images/sort.svg' %}" alt="filter" class="search__filter-img">
                                 <button class="search__filter-btn">Спочатку нові</button>
                             </div>
                         </div>
@@ -96,7 +98,7 @@
                                 <div class="personal__vacancy-item-left">
                                     <div class="personal__item-title-wrapper">
                                         <h3 class="personal__vacancy-title">{{ vacancy.position }}</h3>
-                                        <p class="personal__item-title-text">Розміщено 6.03.2024</p>
+                                        <p class="personal__item-title-text">Розміщено {{ vacancy.publication_date|date:"d.m.Y" }} {{vacancy.get_status_display}}</p>
                                     </div>
                                 </div>
                                 <div class="personal__vacancy-item-right">
@@ -106,33 +108,66 @@
                                             <p class="subtitle-description">показів</p>
                                         </div>
                                         <div class="personal__item-info">
-                                            <p class="subtitle-text">12</p>
+                                            <p class="subtitle-text">{{ vacancy.feedback_count }}</p>
                                             <p class="subtitle-description">відгуків</p>
                                         </div>
                                         <div class="personal__item-info">
-                                            <p class="subtitle-text">57</p>
+                                            <p class="subtitle-text">{{ vacancy.view_count|intspace }}</p>
                                             <p class="subtitle-description">переглядів</p>
                                         </div>
                                     </div>
                                     <div class="personal__title-icon-wrapper">
-                                        <img
-                                                src="../../images/edit.svg"
-                                                alt="edit"
-                                                class="personal__title-edit-icon"
-                                        />
-                                        <img
-                                                class="more-vertical-icon"
-                                                src="../../images/more-vertical.svg"
-                                                alt="more-vertical"
-                                        />
+                                        <img src="{% static 'main/images/edit.svg' %}" alt="edit" class="personal__title-edit-icon"/>
+                                        <img class="more-vertical-icon" src="{% static 'main/images/delete-red.svg' %}" alt="more-vertical"/>
                                     </div>
                                 </div>
+                            </li>
                             {% endfor %}
                         </ul>
-                        <button class="personal__btn-add-resume btn-transparent text-medium-16-light">
-                            <img src="../../images/add-circle-dark.svg" alt="add-circle">
-                            Cтворити ще одну вакансію
-                        </button>
+                        <a href="{% url 'create_vacancy' %}">
+                            <button class="personal__btn-add-resume btn-transparent text-medium-16-light">
+                                <img src="{% static 'images/add-circle-dark.svg' %}" alt="add-circle">
+                                Cтворити ще одну вакансію
+                            </button>
+                        </a>
+                        <div class="vacancies-page__pagination">
+                            <div class="pagination__block">
+                                <div class="pagination">
+                                    <span class="step-links">
+
+                                        <!-- Перша сторінка -->
+                                        <a href="?page=1{% if status %}&status={{ status }}{% endif %}"
+                                           class="{% if vacancies.number == 1 %}active{% endif %}">
+                                           &laquo; 1
+                                        </a>
+
+                                        {% if show_first_dots %}
+                                            <span>...</span>
+                                        {% endif %}
+
+                                        <!-- Попередні сторінки -->
+                                        {% for page in pages %}
+                                            {% if page > 1 and page < total_pages %}
+                                                <a href="?page={{ page }}{% if status %}&status={{ status }}{% endif %}"
+                                                   class="{% if page == vacancies.number %}active{% endif %}">
+                                                   {{ page }}
+                                                </a>
+                                            {% endif %}
+                                        {% endfor %}
+
+                                        {% if show_last_dots %}
+                                            <span>...</span>
+                                        {% endif %}
+
+
+                                        <!-- Остання сторінка -->
+                                        <a href="?page={{ total_pages }}{% if status %}&status={{ status }}{% endif %}"
+                                           class="{% if vacancies.number == total_pages %}active{% endif %}">{{ total_pages }} &raquo;</a>
+
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </section>
                 </div>
             </div>

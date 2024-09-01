@@ -1,0 +1,215 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% load filters %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Особистий кабінет</title>
+    {% block extra_styles %}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <link rel="stylesheet" href="{% static 'main/css/personal.css' %}"/>
+    {% endblock %}
+</head>
+<body>
+{% block content %}
+<div class="wrapper">
+    <main>
+        <div class="container">
+            <div class="personal__inner">
+                <div class="title-wrapper-start">
+                    <h1 class="title-xl">Мій акаунт</h1>
+                    <a class="link-sm" href="#">Дивитися публічний профіль</a>
+                </div>
+                <div class="personal__content-wrapper">
+                    <aside class="personal__content-left">
+                        <div class="personal__content-left-wrapper">
+                            <a href="{% url 'edit_profile' %}"><p class="aside-subtitle subtitle">Налаштування профілю</p></a>
+                            <nav>
+                                <ul class="aside-nav__list">
+                                    <li class="aside-nav__list-item text-medium-18"><a href="{% url 'profile_resume_list' %}">Мої резюме</a></li>
+                                    <li class="aside-nav__list-item text-medium-18"><a href="#">Історія відгуків</a></li>
+                                </ul>
+                                <div class="aside-nav__line"></div>
+                                <ul class="aside-nav__list">
+                                    <li class="aside-nav__list-item text-medium-18 ">
+                                        <a href="#">Рекомендовані вакансії</a>
+                                        <p class="vacancy-info__item-value">12</p>
+                                    </li>
+                                    <li class="aside-nav__list-item text-medium-18 aside-nav__active">
+                                        <a href="{% url 'profile_resume_saved_vacancies' %}">Збережені вакансії</a>
+                                        <p class="vacancy-info__item-value">4</p>
+                                    </li>
+                                </ul>
+                            </nav>
+                            <div class="personal__logout__link-wrapper">
+                                <a href="#" class="logout__link text-medium-18">
+                                    <img
+                                            src="{% static 'main/images/log-in-red.svg' %}"
+                                            alt="search"
+                                            class="search__img"
+                                    />Вийти</a
+                                >
+                            </div>
+                        </div>
+                    </aside>
+                    <section class="personal__content-right">
+                        {% if saved_vacancies %}
+                        <ul class="vacancies__cards">
+                            {% for saved_vacancy in saved_vacancies %}
+                            <li class="vacancies__cards-item">
+                                <div class="vacancies__card">
+                                    <nav>
+                                        <ul class="vacancies__card-hashtags">
+                                            {% if saved_vacancy.vacancy.status == 'hot' %}
+                                            <li class="vacancies__card-hashtags-item hashtags-hot">
+                                                <img src="{% static 'main/images/local_fire.svg' %}" alt="fire">
+                                                <a href="#" class="vacancies__card-hashtags-link">Гаряча вакансія</a>
+                                            </li>
+                                            {% endif %}
+                                            {% if saved_vacancy.vacancy.hashtags.all %}
+                                                {% for hashtag in saved_vacancy.vacancy.hashtags.all %}
+                                                    <li class="vacancies__card-hashtags-item">
+                                                        <a href="#" class="vacancies__card-hashtags-link">{{ hashtag.name }}</a>
+                                                    </li>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </ul>
+                                    </nav>
+
+                                    <div class="vacancies__card-top">
+                                        <div class="vacancies__card-title-block">
+                                            <h3 class="title-article">{{ saved_vacancy.vacancy.position.name }}</h3>
+                                        </div>
+                                        <div class="vacancies__card-top-salary">
+                                            {% if saved_vacancy.vacancy.min_salary and saved_vacancy.vacancy.max_salary %}
+                                                {{ saved_vacancy.vacancy.min_salary|intspace }} - {{ saved_vacancy.vacancy.max_salary|intspace }} ₴
+                                            {% elif saved_vacancy.vacancy.min_salary %}
+                                                Від {{ saved_vacancy.vacancy.min_salary|intspace }} ₴
+                                            {% elif saved_vacancy.vacancy.max_salary %}
+                                                До {{ saved_vacancy.vacancy.max_salary|intspace }} ₴
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="vacancies__card-company-info">
+
+                                        <div class="vacancies__card-company-wrapper">
+                                            <div class="vacancies__card-company-logo">
+                                                <img class="vacancies__card-company-img"
+                                                     src="{% static 'main/images/samsung.svg' %}"
+                                                     alt="logo">
+                                            </div>
+
+                                            <div class="vacancies__card-company-name">{{ saved_vacancy.vacancy.company }}</div>
+                                        </div>
+
+                                        <div class="location-block">
+                                            <img class="location-img" src="{% static 'main/images/marker-pin-01.svg' %}"
+                                                 alt="location">
+                                            <p class="location-text">{{ saved_vacancy.vacancy.city }}</p>
+                                        </div>
+                                    </div>
+                                    <p class="vacancies__card-description">
+                                        Повна зайнятість. Досвід роботи від 1 року. Будівельна компанія Ekonombud— шукає
+                                        у
+                                        свою
+                                        команду
+                                        Менеджера з продажу Ekonombud — лідер у сфері гідро та теплоізоляції. Ми
+                                        спеціалізуємося
+                                        на утепленні та гідроізоляції житлових...
+                                    </p>
+                                    <div class="vacancies__card-bottom-wrapper">
+                                        <div class="vacancies__card-bottom">
+                                            <div class="vacancies__card-bottom-buttons">
+                                                <a href="#"
+                                                   class="vacancies__card-bottom-btn btn-color">Відгукнутись</a>
+                                                <a href="#"
+                                                   class="vacancies__card-bottom-btn btn-transparent">Детальніше</a>
+                                            </div>
+                                            <a href="{% url 'delete_saved_vacancy' saved_vacancy.vacancy.id %}">
+                                            <label class="heart-icon__label text-medium-16" data-vacancy-id="{{ vacancy.id }}">
+                                                <img src="{% static 'main/images/delete.svg' %}" alt="delete"/>
+                                                <span>Видалити</span>
+                                            </label>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                        <button class="personal__btn-add-resume btn-transparent">
+                            Завантажити ще (9)
+                        </button>
+                        {% else %}
+                        <p>Немає збережених вакансій.</p>
+                        {% endif %}
+
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="{% static 'main/js/index.js' %}"></script>
+<script src="{% static 'main/js/messages-error.js' %}"></script>
+<script>
+    $(document).ready(function(){
+    // Function to display Toastify notifications
+    function showCToast(type, message) {
+        const colorMap = {
+            "info": '#63B3ED',
+            "success": '#2dce89',
+            "error": '#f5365c',
+            "default": "#20c997"
+        };
+
+        const color = colorMap[type] || colorMap["default"];
+
+        // Configure and display the toast notification
+        Toastify({
+            text: message,
+            duration: 3000,
+            className: type,
+            close: true,
+            gravity: "top",
+            position: "right",
+            stopOnFocus: true,
+            style: {
+                background: color,
+            },
+            escapeMarkup: false,
+        }).showToast();
+    }
+
+    // Extract Django messages and display them using Toastify
+    const customMessages = [
+        {% for message in messages %}
+            {
+                "tags": "{{ message.tags|default:''|escapejs }}",
+                "message": '{{ message.message|default:''|escapejs }}'
+            }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+
+    // Debugging: Log messages to the console
+    console.log(customMessages);
+
+    // Display each custom message using Toastify
+    customMessages.forEach(message => {
+        showCToast(message.tags, message.message);
+    });
+});
+</script>
+
+{% endblock %}
+</body>
+</html>

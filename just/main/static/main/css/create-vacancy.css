@@ -23,6 +23,8 @@
     border: 1px solid #B6B6B6;
     border-radius: 16px;
     padding: 24px;
+    resize: none;
+    overflow: hidden;
 }
 
 .create-vacancy__create-btn {
@@ -71,23 +73,71 @@
 }
 
 .create-vacancy__btn {
-    padding: 17px 35px;
-    border-radius: 12px;
+    padding: 16px 81px;
     margin-top: 40px;
-    font-weight: 500;
-    font-size: 16px;
 }
 
 .create-vacancy__block {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 24px 32px;
+    padding: 32px 24px;
     border-radius: 16px;
-    background-color: var(--bg-color);
+    background-color: var(--bg-white);
 }
 
 .create-vacancy__list {
     display: flex;
-    gap: 20px;
+    gap: 42px;
+}
+
+.create-vacancy__button-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+.create-vacancy__checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    border: none;
+    background-color: transparent;
+}
+.create-vacancy__hashtags-list{
+    min-width: 509px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: nowrap;
+}
+.create-vacancy__hashtags-item{
+    list-style-type: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+}
+
+.create-vacancy__action-wrapper {
+    display: flex;
+    gap: 16px;
+}
+.create-vacancy__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.create-vacancy__actions-btn{
+    display: flex;
+    width: 168px;
+    height: 40px;
+    font-size: 14px;
+    align-items: center;
+    padding: 8px 24px;
+}
+.create-vacancy__actions-img {
+    width: 80px;
+    height: 80px;
+}
+.create-vacancy__delete-btn{
+    width: 40px;
+    height: 40px;
 }

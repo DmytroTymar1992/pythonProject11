@@ -1,0 +1,259 @@
+.vacancy-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 28px;
+    margin: 40px 0 83px;
+}
+
+.vacancy {
+    padding: 24px;
+    border-radius: 16px;
+    background-color: var(--bg-white);
+    flex-basis: 732px;
+}
+
+.vacancies-item__top-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.vacancy__title-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.vacancy__title-inner {
+    display: flex;
+    align-items: center;
+}
+
+.vacancy__title-icon-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 16px;
+
+}
+
+.vacancy__title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-top: 16px;
+}
+
+.vacancies-item__btn {
+    padding: 13px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.vacancies-item__top-right {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.vacancies-item__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.vacancies-item__more-vertical {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+}
+
+.vacancy__hashtags-wrapper {
+    margin-top: 24px;
+}
+
+.vacancy__company-info-wrapper {
+    margin-top: 24px;
+}
+
+.card-mini__company-info-wrapper {
+    margin-top: 16px;
+}
+
+.card-mini__requirements-wrapper {
+    margin: 16px 0;
+}
+
+.vacancy__company-info {
+    display: flex;
+    gap: 6px;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.vacancies__card-mini__company-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: var(--bg-color);
+    border-radius: 8px;
+}
+
+.vacancy__company-description {
+    font-size: 14px;
+    color: var(--grey-3);
+}
+
+.vacancy__requirements-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    background-color: var(--bg-card);
+    padding: 16px;
+    margin: 24px 0;
+    border-radius: 16px;
+}
+
+.vacancy__requirements-item {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+}
+
+.vacancy__requirements-description {
+    display: flex;
+    gap: 8px;
+    flex-direction: column;
+}
+
+.vacancy__requirements-coincidence-block {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 14px;
+}
+
+.vacancy__requirements-coincidence {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 14px;
+    color: var(--grey-3);
+}
+
+.requirements-map-block {
+    display: flex;
+    align-items: center;
+    color: #1C274C;
+    gap: 4px;
+    font-weight: 400;
+    opacity: 100%;
+}
+
+.vacancy__description-title-text {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.vacancy__description-list {
+    margin: 16px 0 0 25px;
+}
+
+.vacancy__description-text-wrapper {
+    margin: 16px 0 28px;
+}
+
+.requirements-map-text {
+    color: var(--grey-3);
+}
+
+.requirements-map-link {
+    color: var(--link-light);
+}
+
+.vacancy__description-text {
+    line-height: 150%;
+    margin-top: 8px;
+}
+
+.vacancy__description-subtitle-text {
+    line-height: 150%;
+    font-weight: 600;
+}
+
+.vacancy__contact-wrapper {
+    display: flex;
+    gap: 16px;
+    margin-top: 8px;
+}
+
+.vacancy__contact-number {
+    line-height: 150%;
+    text-decoration: underline;
+    opacity: 70%;
+    color: var(--link-light);
+}
+
+.vacancy__contact-service {
+    line-height: 150%;
+    text-decoration: none;
+}
+
+.vacancy__social-block-wrapper {
+    margin: 19px 0;
+}
+
+.vacancy__publish-data {
+    font-size: 14px;
+    color: var(--grey-3);
+}
+
+.vacancy__card-bottom-wrapper {
+    margin-top: 24px;
+}
+
+.vacancy__sidebar {
+    flex-basis: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.vacancy__sidebar-similar-vacancies {
+    background-color: var(--bg-white);
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.vacancy__sidebar-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.vacancy__sidebar-item {
+    list-style-type: none;
+}
+
+.vacancy__sidebar-btn-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+.vacancy__sidebar-btn {
+    padding: 16px 41px;
+    border-radius: 8px;
+    color: var(--green);
+    font-weight: 500;
+}
+
+.vacancy__sidebar-company-vacancies {
+    padding: 24px;
+    border-radius: 16px;
+    background-color: var(--bg-white);
+}

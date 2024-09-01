@@ -1,14 +1,13 @@
 {% extends "main/base.html" %}
 {% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Особистий кабінет</title>
-     {% block extra_styles %}
-    <link rel="stylesheet" href="{% static 'main/css/personal.css' %}"/>
-    {% endblock %}
-</head>
-<body>
+{% block extra_styles %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+<link rel="stylesheet" href="{% static 'main/css/personal.css' %}"/>
+{% endblock %}
 {% block content %}
 <div class="wrapper">
     <main>
@@ -21,56 +20,52 @@
 
                 <div class="personal__content-wrapper">
                     <aside class="personal__content-left">
-                        <div class="personal__content-left-wrapper">
+                        <div class="personal__content-left-wrapper ">
+                            <p class="aside-subtitle subtitle aside-nav__active">Налаштування профілю</p>
                             <nav>
                                 <ul class="aside-nav__list">
-                                    <li class="text-medium-18 aside-nav__active"><a href="#">Налаштування профілю</a>
-                                    </li>
-                                    <li class="text-medium-18"><a href="{% url 'profile_resume_list' %}">Мої резюме</a></li>
-                                    <li class="text-medium-18"><a href="#">Історія відгуків</a></li>
+                                    <li class="aside-nav__list-item text-medium-18"><a href="{% url 'profile_resume_list' %}">Мої резюме</a></li>
+                                    <li class="aside-nav__list-item text-medium-18"><a href="#">Історія відгуків</a></li>
                                 </ul>
-                                <ul class="vacancy-info__list">
-                                    <li class="vacancy-info__list-item">
-                                        <a class="text-medium-18" href="#">Рекомендовані вакансії</a>
+                                <div class="aside-nav__line"></div>
+                                <ul class="aside-nav__list">
+                                    <li class="aside-nav__list-item text-medium-18">
+                                        <a href="#">Рекомендовані вакансії</a>
                                         <p class="vacancy-info__item-value">12</p>
                                     </li>
-                                    <li class="vacancy-info__list-item">
-                                        <a class="text-medium-18" href="#">Збережені вакансії</a>
+                                    <li class="aside-nav__list-item text-medium-18">
+                                        <a href="{% url 'profile_resume_saved_vacancies' %}">Збережені вакансії</a>
                                         <p class="vacancy-info__item-value">4</p>
                                     </li>
                                 </ul>
                             </nav>
                             <div class="personal__logout__link-wrapper">
-                                <a href="#" class="logout__link text-medium-18">
+                                <a href="{% url 'logout' %}" class="logout__link text-medium-18">
                                     <img
-                                            src="../../images/log-in.svg"
+                                            src="{% static 'main/images/log-in.svg' %}"
                                             alt="search"
                                             class="search__img"
                                     />Вийти</a
                                 >
                             </div>
-
                         </div>
-
-
                     </aside>
                     <section class="personal__content-right">
-                        <form class="form__inner" method="post">
+                        <form class="form__inner" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             <fieldset class="form-field">
-                                <h3 class="form__subtitle-md">Особиста інформація</h3>
+                                <h3 class="title-article">Особиста інформація</h3>
                                 <div class="form__inputs-photo-block">
-                                    <img
-                                            src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'main/images/img-icon.svg' %}{% endif %}"
-                                            alt="photo"
-                                            class="personal__photo"
-                                    />
+                                    <img id="avatar-preview"
+                                         src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'main/images/img-icon.svg' %}{% endif %}"
+                                         alt="photo"
+                                         class="personal__photo"/>
                                     <div class="form__inputs-photo-btn-wrapper">
                                         <label class="update-photo__btn btn-transparent">
                                             Оновити
-                                            <input type="file" name="avatar" accept="image/*" style="display: none;">
+                                            <input type="file" name="avatar" id="avatar-input" accept="image/*" style="display: none;">
                                         </label>
-                                        <button type="submit" name="delete_avatar" value="1" class="delete-photo__btn btn-transparent">
+                                        <button class="delete-photo__btn btn-transparent__delete" type="submit" name="delete_avatar" value="1">
                                             <img src="{% static 'main/images/delete.svg' %}" alt="delete"/>
                                         </button>
                                     </div>
@@ -84,7 +79,7 @@
                                     </div>
                                     <div class="form__input-horizontal-wrapper">
                                         <label for="name-resume" class="text-medium-16"
-                                        >Ім’я*</label
+                                        >Ім’я</label
                                         >
                                         {{ form.first_name }}
                                     </div>
@@ -92,18 +87,17 @@
                                         <label for="city-resume" class="text-medium-16"
                                         >Місто*</label
                                         >
-                                        {{ form.city }}
+                                        {{ form.city_name }}
+                                        <input type="hidden" id="id_city_id" name="city_id">
                                     </div>
-
-                                    <div class="form__input-horizontal-wrapper">
-                                        <label class="text-medium-16">Дата народження*</label>
-                                        <div class="select-date-block">
-                                            <label for="day-resume" class="label-hidden"
-                                            >from</label
-                                            >
+                                    <div id="city_not_found" style="display:none;color:red;" >Місто не знайдено</div>
+                                    <div class="form__select-horizontal-wrapper">
+                                        <label class="text-medium-16 form__select-label">Дата народження*</label>
+                                        <div class="create-resume__select-block">
                                             {{ form.birthday }}
                                         </div>
                                     </div>
+
                                     <div class="form__input-horizontal-wrapper">
                                         <label for="phone-resume" class="text-medium-16"
                                         >Телефон*</label
@@ -127,40 +121,51 @@
                                                 placeholder="Facebook, Instagram, Linkedin"
                                         />
                                     </div>
-                                    <div class="input-add__wrapper">
+                                    <button class="input-add__wrapper">
                                         <img
                                                 class="input-add__btn"
-                                                src="../../images/add-circle.svg"
+                                                src="{% static 'main/images/add-circle.svg' %}"
                                                 alt="plus"
                                         />
-                                        <p>Додати посилання</p>
-                                    </div>
+                                        Додати посилання
+                                    </button>
+                                    <input type="hidden" name="cropped_avatar" id="cropped-avatar">
                                     <div class="form__input-horizontal-wrapper">
                                         <label for="submit-personal" class="label-hidden"
                                         >Пароль</label
                                         >
                                         <input
                                                 id="submit-personal"
-                                                class="form__input btn-transparent"
+                                                class="form__input btn-color text-btn-16"
                                                 type="submit"
                                                 value="Зберегти зміни"
                                         />
                                     </div>
                                     <div class="input-add__left-wrapper">
-                                        <img
-                                                class="input-add__btn"
-                                                src="../../images/delete-alt.svg"
-                                                alt="plus"
-                                        />
-                                        <p>Видалити профіль</p>
+                                        <button class="btn-delete form__add-btn-2">
+                                                <img
+                                                        src="{% static 'main/images/delete-alt.svg' %}"
+                                                        alt="add-circle"
+                                                />
+                                                Видалити профіль
+                                        </button>
                                     </div>
                                 </div>
                             </fieldset>
                         </form>
+                        <div class="modal" id="cropModal" style="display:none;">
+                            <div class="modal-content">
+                                <span class="close" id="closeModal">&times;</span>
+                                <div class="img-container">
+                                    <img id="cropper-image">
+                                </div>
+                                <button id="cropAndUploadButton" type="button" class="form__input btn-color text-btn-16">Завантажити</button>
+                            </div>
+                        </div>
                         <form class="form__inner">
                             <fieldset class="form-field">
                                 <div class="form__subtitle-wrapper">
-                                    <h3 class="form__subtitle-md">Зміна паролю</h3>
+                                    <h3 class="title-article">Зміна паролю</h3>
                                     <p class="subtitle-description">Остання зміна: 23.06.2023</p>
                                 </div>
 
@@ -201,7 +206,7 @@
                                         >
                                         <input
                                                 id="password-personal3"
-                                                class="form__input btn-transparent"
+                                                class="form__input btn-color text-btn-16"
                                                 type="submit"
                                                 value="Оновити пароль"
                                         />
@@ -217,6 +222,154 @@
     </main>
 </div>
 {% endblock %}
-<script src="../../index.js"></script>
-</body>
-</html>
+{% block extra_js %}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="{% static 'main/js/crop-image.js' %}"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('avatar-input').addEventListener('change', function(event){
+            var input = event.target;
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('avatar-preview').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        $('#id_city_name').autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: "{% url 'get_city_suggestions' %}",
+                    dataType: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function(data) {
+                        response($.map(data, function(item) {
+                            return {
+                                label: item.name,
+                                value: item.name,
+                                id: item.id
+                            };
+                        }));
+                    }
+                });
+            },
+            minLength: 2,
+            select: function(event, ui) {
+                $('#id_city_name').val(ui.item.value);
+                $('#id_city_id').val(ui.item.id);
+                $('#city_not_found').hide();
+            },
+            change: function(event, ui) {
+                if (!ui.item) {
+                    $('#id_city_id').val('');
+                }
+            },
+            response: function(event, ui) {
+                if (ui.content.length === 0) {
+                    $('#city_not_found').show();
+                } else {
+                    $('#city_not_found').hide();
+                }
+            },
+            open: function(event, ui) {
+                var $input = $(event.target),
+                    $wrapper = $input.closest('.js_open'),
+                    wrapperWidth = $wrapper.outerWidth();
+
+                $input.autocomplete("widget").css('width', wrapperWidth + 'px');
+            },
+            classes: {
+                "ui-autocomplete": "search-location__select-list",
+                "ui-menu-item": "search-location__select-item"
+            },
+            appendTo: '.form__input .input-size-lg'
+        });
+
+        $('#id_city_name').on('blur', function() {
+            var cityName = $(this).val();
+            if (cityName) {
+                $.ajax({
+                    url: "{% url 'get_city_suggestions' %}",
+                    dataType: "json",
+                    data: {
+                        term: cityName
+                    },
+                    success: function(data) {
+                        var cityFound = false;
+                        $.each(data, function(index, item) {
+                            if (item.name.toLowerCase() === cityName.toLowerCase()) {
+                                $('#id_city_id').val(item.id);
+                                cityFound = true;
+                                $('#city_not_found').hide();
+                                return false;
+                            }
+                        });
+                        if (!cityFound) {
+                            $('#city_not_found').show();
+                            $('#id_city_id').val('');
+                        }
+                    }
+                });
+            }
+        });
+
+        // Function to display Toastify notifications
+        function showCToast(type, message) {
+            /*
+            type: info, success, error, default;
+            message: message to be displayed.
+            */
+            const colorMap = {
+                "info": '#63B3ED',
+                "success": '#2dce89',
+                "error": '#f5365c',
+                "default": "#20c997"
+            };
+
+            const color = colorMap[type] || colorMap["default"];
+
+            // Configure and display the toast notification
+            Toastify({
+                text: message,
+                duration: 3000,
+                className: type,
+                close: true,
+                gravity: "top",       // `top` or `bottom`
+                position: "right",   // `left`, `center` or `right`
+                stopOnFocus: true,    // Prevent dismissing of toast on hover
+                style: {
+                    background: color,
+                },
+                escapeMarkup: false,   // Render HTML tags in the notification
+            }).showToast();
+        }
+
+        // Extract Django messages and display them using Toastify
+        const customMessages = [
+            {% for message in messages %}
+                {
+                    "tags": "{{ message.tags|default:''|escapejs }}",
+                    "message": '{{ message.message|default:''|escapejs }}'
+                }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        // Debugging: Log messages to the console
+        console.log(customMessages);
+
+        // Display each custom message using Toastify
+        customMessages.forEach(message => {
+            showCToast(message.tags, message.message);
+        });
+    });
+    </script>
+
+{% endblock %}
